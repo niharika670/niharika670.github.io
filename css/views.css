@@ -1,0 +1,282 @@
+/**
+ * Views CSS — WeSakhi (wesakhi.com)
+ */
+
+/* View Visibility & Smooth Transition */
+.view-section {
+  display: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s var(--ease-luxury), transform 0.35s var(--ease-luxury);
+  padding-top: var(--space-xl);
+  min-height: calc(100vh - var(--header-height));
+}
+
+.view-section.active-view {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Sub-Brand Context Top Bar */
+.subbrand-top-bar {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  padding: 12px 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  margin-top: calc(-1 * var(--space-xl));
+  margin-bottom: var(--space-xl);
+}
+
+.subbrand-top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subbrand-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.subbrand-breadcrumb a {
+  color: var(--color-text-tertiary);
+}
+
+.subbrand-breadcrumb a:hover {
+  color: var(--color-text-main);
+}
+
+.subbrand-switch-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-fast);
+}
+
+.subbrand-switch-link:hover {
+  color: var(--color-text-main);
+  border-color: var(--color-border-strong);
+}
+
+
+/* ==========================================================================
+   1. GATEWAY HERO & TWO VENTURE HUBS
+   ========================================================================== */
+.gateway-hero {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  text-align: center;
+}
+
+.gateway-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  padding: 6px 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.gateway-title {
+  font-family: var(--font-serif);
+  font-size: clamp(3.2rem, 7vw, 5.5rem);
+  font-weight: 500;
+  color: var(--color-text-main);
+  line-height: 1.05;
+  margin-bottom: var(--space-xs);
+}
+
+.gateway-tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.gateway-desc {
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+  max-width: 62ch;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+
+/* ==========================================================================
+   2. ACCOUNTS SAKHI PLATFORM STYLES
+   ========================================================================== */
+.accounts-hero {
+  padding: clamp(2rem, 4vw, 3.5rem) 0 var(--space-2xl) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accounts-hero-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.accounts-logo-display {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accounts-logo-display img {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+
+/* ==========================================================================
+   3. SAKHI CREATIONS PLATFORM STYLES
+   ========================================================================== */
+.creations-hero {
+  padding: clamp(2rem, 4vw, 3.5rem) 0 var(--space-2xl) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.creations-hero-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+
+.creations-logo-display {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.creations-logo-display img {
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+}
+
+
+/* ==========================================================================
+   4. ABOUT & CONTACT VIEWS
+   ========================================================================== */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.about-card {
+  padding: var(--space-2xl);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+}
+
+.contact-card {
+  max-width: 680px;
+  margin: 0 auto;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 4vw, 3.5rem);
+  box-shadow: var(--shadow-card);
+}
+
+.contact-info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+
+/* ==========================================================================
+   5. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .gateway-dual-grid, .accounts-hero-grid, .creations-hero-grid, .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .footer-main-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .mobile-nav-drawer {
+    display: flex;
+  }
+
+  .mobile-nav-drawer.open {
+    transform: translateY(0);
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .mobile-nav-link {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    color: var(--color-text-main);
+  }
+}

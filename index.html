@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeSakhi — Accounts Sakhi &amp; Sakhi Creations | wesakhi.com</title>
+  <meta name="description" content="WeSakhi (wesakhi.com): Home of Accounts Sakhi (Accounting, Tax, Compliance & AI Guidance) and Sakhi Creations (Handcrafted in Meerut).">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/views.css">
+</head>
+<body>
+
+  <!-- =======================================================================
+       1. MINIMAL BRAND HEADER
+       ======================================================================= -->
+  <header class="site-header" role="banner">
+    <div class="container-gateway header-inner">
+      
+      <!-- Brand Logo / Domain -->
+      <a href="#/gateway" class="brand-logo" data-route="gateway" aria-label="WeSakhi Home">
+        <div class="brand-text-block">
+          <span class="brand-name">WeSakhi</span>
+          <span class="brand-subtitle">wesakhi.com</span>
+        </div>
+      </a>
+
+      <!-- Primary Navigation Links -->
+      <nav class="nav-menu" role="navigation" aria-label="Main Navigation">
+        <a href="#/gateway" class="nav-link active" data-route="gateway">Overview</a>
+        <a href="#/accounts-sakhi" class="nav-link" data-route="accounts-sakhi">Accounts Sakhi</a>
+        <a href="#/sakhi-creations" class="nav-link" data-route="sakhi-creations">Sakhi Creations</a>
+        <a href="#/about" class="nav-link" data-route="about">About</a>
+        <a href="#/contact" class="nav-link" data-route="contact">Contact</a>
+      </nav>
+
+      <!-- Direct WhatsApp Action -->
+      <div class="header-actions">
+        <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="whatsapp-direct-btn" title="Chat on WhatsApp">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
+          <span>9068711159</span>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-btn" aria-label="Open Mobile Menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Slide-Out Navigation Drawer -->
+  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+    <div class="mobile-nav-header">
+      <div>
+        <div class="brand-name">WeSakhi</div>
+        <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-tertiary);">wesakhi.com</div>
+      </div>
+      <button class="mobile-nav-close-btn modal-close-btn" aria-label="Close Mobile Menu">×</button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li><a href="#/gateway" class="mobile-nav-link" data-route="gateway">Overview Gateway</a></li>
+      <li><a href="#/accounts-sakhi" class="mobile-nav-link" data-route="accounts-sakhi">Accounts Sakhi (CA &amp; Tax)</a></li>
+      <li><a href="#/sakhi-creations" class="mobile-nav-link" data-route="sakhi-creations">Sakhi Creations (Handmade)</a></li>
+      <li><a href="#/about" class="mobile-nav-link" data-route="about">About WeSakhi</a></li>
+      <li><a href="#/contact" class="mobile-nav-link" data-route="contact">Contact &amp; WhatsApp</a></li>
+    </ul>
+  </div>
+
+
+  <!-- =======================================================================
+       MAIN CONTENT CONTAINER
+       ======================================================================= -->
+  <main id="app-root">
+
+    <!-- =====================================================================
+         VIEW 1: GATEWAY LANDING PAGE (TWO PASSIONS)
+         ===================================================================== -->
+    <section id="view-gateway" class="view-section active-view">
+      
+      <!-- Clean Hero Header -->
+      <div class="container-gateway gateway-hero">
+        <div class="gateway-badge">
+          <span>WeSakhi &bull; Official Brand Gateway</span>
+        </div>
+        
+        <h1 class="gateway-title">WeSakhi</h1>
+        <div class="gateway-tagline">One Platform. Two Passions.</div>
+        
+        <p class="gateway-desc">
+          Connecting professional financial expertise and CA education with authentic handmade craftsmanship. Select a venture below to explore.
+        </p>
+      </div>
+
+      <!-- Two Big Gateway Logo Cards -->
+      <div class="container-gateway">
+        <div class="gateway-dual-grid" role="region" aria-label="Select Venture Stream">
+          
+          <!-- ==========================================
+               VENTURE 1: ACCOUNTS SAKHI
+               ========================================== -->
+          <article class="gateway-brand-card accounts-card">
+            <div class="card-logo-stage">
+              <img src="assets/images/accounts-sakhi-logo.jpg" alt="Accounts Sakhi Logo" class="brand-logo-img">
+            </div>
+
+            <div class="card-details-stage">
+              <span class="card-tagline-badge" style="color:#17324D;">Accounting &bull; Tax &bull; Compliance &bull; AI Guidance</span>
+              <h2 class="card-brand-title">Accounts सखी™</h2>
+              <div class="card-brand-motto">Learn. Understand. Grow.</div>
+
+              <p class="card-brand-desc">
+                Educational video masterclasses, practical tax compliance frameworks, Ind AS breakdowns, and AI-driven financial guidance for CA aspirants, students, and businesses.
+              </p>
+
+              <div class="card-cta-group">
+                <a href="#/accounts-sakhi" class="btn-primary-action" data-route="accounts-sakhi">
+                  <span>Explore Accounts Sakhi Platform</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener" class="btn-secondary-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" color="#CC0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  <span>Watch on YouTube</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+
+          <!-- ==========================================
+               VENTURE 2: SAKHI CREATIONS
+               ========================================== -->
+          <article class="gateway-brand-card creations-card">
+            <div class="card-logo-stage">
+              <img src="assets/images/sakhi-creations-logo.jpg" alt="Sakhi Creations Logo" class="brand-logo-img">
+            </div>
+
+            <div class="card-details-stage">
+              <span class="card-tagline-badge" style="color:#7A2833;">Handcrafted in Meerut &bull; 9068711159</span>
+              <h2 class="card-brand-title">सखी CREATIONS</h2>
+              <div class="card-brand-motto">Where Her Hands Create Her Future.</div>
+
+              <p class="card-brand-desc">
+                Authentic handmade studio creations, handbound journals, artisanal decor, and lifestyle objects lovingly handcrafted in Meerut. Available for direct purchase &amp; custom orders.
+              </p>
+
+              <div class="card-cta-group">
+                <a href="#/sakhi-creations" class="btn-primary-action" data-route="sakhi-creations">
+                  <span>Explore Sakhi Creations Shop</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="btn-secondary-action" style="color:#1E88E5;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" color="#25D366"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
+                  <span>Order on WhatsApp (9068711159)</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================================
+         VIEW 2: ACCOUNTS SAKHI PLATFORM
+         ===================================================================== -->
+    <section id="view-accounts-sakhi" class="view-section">
+      
+      <!-- Context Top Bar -->
+      <div class="subbrand-top-bar">
+        <div class="container-gateway subbrand-top-bar-inner">
+          <div class="subbrand-breadcrumb">
+            <a href="#/gateway" data-route="gateway">WeSakhi Gateway</a>
+            <span>/</span>
+            <span style="color:#17324D; font-weight:600;">Accounts Sakhi</span>
+          </div>
+          <a href="#/sakhi-creations" class="subbrand-switch-link" data-route="sakhi-creations">
+            <span>Switch to Sakhi Creations</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Section -->
+      <div class="accounts-hero">
+        <div class="container-gateway">
+          <div class="accounts-hero-grid">
+            <div>
+              <span class="badge" style="background:#EBF2F7; color:#17324D; margin-bottom:12px;">Accounts सखी™ &bull; Knowledge Hub</span>
+              <h1 style="font-size:clamp(2.2rem, 3.8vw, 3.4rem); line-height:1.15; margin-bottom:14px; color:var(--color-text-main);">
+                Making CA, Taxation and Financial Compliance Simple &amp; Intuitive.
+              </h1>
+              <p style="font-size:1.05rem; line-height:1.65; margin-bottom:24px; color:var(--color-text-secondary);">
+                Comprehensive educational lectures, practical taxation case studies, Ind AS reporting breakdowns, and modern AI guidance for CA aspirants and finance professionals.
+              </p>
+              <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                <a href="https://youtube.com" target="_blank" rel="noopener" class="btn" style="background:#CC0000; color:#FFF;">
+                  Watch on YouTube Channel ↗
+                </a>
+                <a href="#ca-resources-box" class="btn btn-secondary" onclick="document.getElementById('ca-resources-box').scrollIntoView({behavior:'smooth'})">
+                  Free Study Vault ↓
+                </a>
+              </div>
+            </div>
+
+            <div class="accounts-logo-display">
+              <img src="assets/images/accounts-sakhi-logo.jpg" alt="Accounts Sakhi Logo">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Masterclasses -->
+      <section class="section">
+        <div class="container-gateway">
+          <div class="section-header">
+            <span class="section-eyebrow" style="color:#17324D;">Educational Lectures</span>
+            <h2 class="section-title">Featured Video Masterclasses</h2>
+            <p class="section-subtitle">Structured lessons covering Indian taxation, accounting standards, and exam strategy.</p>
+          </div>
+
+          <!-- Filter Pills -->
+          <div class="filter-bar">
+            <button class="filter-btn js-ca-filter active" data-cat="all">All Content</button>
+            <button class="filter-btn js-ca-filter" data-cat="taxation">Taxation &amp; GST</button>
+            <button class="filter-btn js-ca-filter" data-cat="accounting">Accounting &amp; Ind AS</button>
+            <button class="filter-btn js-ca-filter" data-cat="compliance">Corporate Compliance</button>
+            <button class="filter-btn js-ca-filter" data-cat="ca-strategy">CA Exam Strategy</button>
+          </div>
+
+          <div id="accounts-video-grid" class="video-grid">
+            <!-- Rendered by js/main.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Free Knowledge Vault -->
+      <section id="ca-resources-box" class="section" style="background-color:var(--color-bg-secondary); border-top:1px solid var(--color-border); border-bottom:1px solid var(--color-border);">
+        <div class="container-gateway">
+          <div class="section-header">
+            <span class="section-eyebrow" style="color:#17324D;">Free Knowledge Vault</span>
+            <h2 class="section-title">Reference Guides &amp; Frameworks</h2>
+            <p class="section-subtitle">Actionable reference cheat-sheets and practical compliance decision trees.</p>
+          </div>
+
+          <div id="accounts-resource-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:var(--space-lg);">
+            <!-- Rendered by js/main.js -->
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+
+    <!-- =====================================================================
+         VIEW 3: SAKHI CREATIONS SHOP & STUDIO
+         ===================================================================== -->
+    <section id="view-sakhi-creations" class="view-section">
+      
+      <!-- Context Top Bar -->
+      <div class="subbrand-top-bar">
+        <div class="container-gateway subbrand-top-bar-inner">
+          <div class="subbrand-breadcrumb">
+            <a href="#/gateway" data-route="gateway">WeSakhi Gateway</a>
+            <span>/</span>
+            <span style="color:#7A2833; font-weight:600;">Sakhi Creations</span>
+          </div>
+          <a href="#/accounts-sakhi" class="subbrand-switch-link" data-route="accounts-sakhi">
+            <span>Switch to Accounts Sakhi</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Section -->
+      <div class="creations-hero">
+        <div class="container-gateway">
+          <div class="creations-hero-grid">
+            <div>
+              <span class="badge" style="background:#FBF1F2; color:#7A2833; margin-bottom:12px;">सखी CREATIONS &bull; Handcrafted in Meerut</span>
+              <h1 style="font-size:clamp(2.2rem, 3.8vw, 3.4rem); line-height:1.15; margin-bottom:14px; color:var(--color-text-main);">
+                Where Her Hands Create Her Future.
+              </h1>
+              <p style="font-size:1.05rem; line-height:1.65; margin-bottom:24px; color:var(--color-text-secondary);">
+                Authentic handmade products, handbound cotton journals, studio ceramics, and artisanal decor crafted lovingly in Meerut. Order directly via WhatsApp or phone.
+              </p>
+              <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+                <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="whatsapp-direct-btn" style="padding:10px 22px; font-size:0.9rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
+                  <span>Order via WhatsApp (9068711159)</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="creations-logo-display">
+              <img src="assets/images/sakhi-creations-logo.jpg" alt="Sakhi Creations Logo">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Catalog -->
+      <section class="section">
+        <div class="container-gateway">
+          <div class="section-header">
+            <span class="section-eyebrow" style="color:#7A2833;">Studio Catalog</span>
+            <h2 class="section-title">Handcrafted Creations</h2>
+            <p class="section-subtitle">Click "Order on WhatsApp" on any piece to place an order or ask for custom sizing.</p>
+          </div>
+
+          <!-- Filter Pills -->
+          <div class="filter-bar">
+            <button class="filter-btn js-craft-filter active" data-cat="all">All Creations</button>
+            <button class="filter-btn js-craft-filter" data-cat="crafts">Decor &amp; Art</button>
+            <button class="filter-btn js-craft-filter" data-cat="textiles">Linen &amp; Textiles</button>
+            <button class="filter-btn js-craft-filter" data-cat="journals">Handbound Journals</button>
+            <button class="filter-btn js-craft-filter" data-cat="pottery">Studio Ceramics</button>
+          </div>
+
+          <div id="creations-product-grid" class="product-grid">
+            <!-- Rendered by js/main.js -->
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+
+    <!-- =====================================================================
+         VIEW 4: ABOUT WESAKHI
+         ===================================================================== -->
+    <section id="view-about" class="view-section">
+      <div class="container section">
+        <div class="section-header text-center">
+          <span class="section-eyebrow">About WeSakhi</span>
+          <h2 class="section-title">Professional Knowledge &bull; Authentic Craft</h2>
+          <p class="section-subtitle">The vision and story behind both ventures.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:#17324D; margin-bottom:12px;">Accounts Sakhi</h3>
+            <p style="font-size:0.95rem; color:var(--color-text-secondary); line-height:1.65; margin-bottom:16px;">
+              Built to demystify complex accounting standards, direct tax laws, and compliance for aspiring Chartered Accountants, students, and businesses. Through structured YouTube lectures and modern AI guidance, we empower learners with clarity and confidence.
+            </p>
+            <a href="#/accounts-sakhi" class="btn-text" data-route="accounts-sakhi" style="color:#17324D;">Explore Accounts Sakhi →</a>
+          </div>
+
+          <div class="about-card">
+            <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:#7A2833; margin-bottom:12px;">Sakhi Creations</h3>
+            <p style="font-size:0.95rem; color:var(--color-text-secondary); line-height:1.65; margin-bottom:16px;">
+              "Where Her Hands Create Her Future." An artisanal initiative based in Meerut dedicated to authentic handcrafted goods, handbound cotton journals, pottery, and textiles made slowly with love and care.
+            </p>
+            <a href="#/sakhi-creations" class="btn-text" data-route="sakhi-creations" style="color:#7A2833;">Explore Sakhi Creations →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =====================================================================
+         VIEW 5: CONTACT
+         ===================================================================== -->
+    <section id="view-contact" class="view-section">
+      <div class="container section">
+        <div class="section-header text-center">
+          <span class="section-eyebrow">Get in Touch</span>
+          <h2 class="section-title">Contact WeSakhi</h2>
+          <p class="section-subtitle">Reach out for educational inquiries, CA consulting, or custom handmade orders.</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-info-row">
+            <span style="font-weight:600; color:var(--color-text-main);">📞 Phone / WhatsApp:</span>
+            <a href="https://wa.me/919068711159" target="_blank" rel="noopener" style="color:#25D366; font-weight:700;">+91 9068711159</a>
+          </div>
+
+          <div class="contact-info-row">
+            <span style="font-weight:600; color:var(--color-text-main);">📍 Location:</span>
+            <span>Meerut &bull; New Delhi, India</span>
+          </div>
+
+          <div class="contact-info-row">
+            <span style="font-weight:600; color:var(--color-text-main);">🌐 Domain:</span>
+            <span>wesakhi.com</span>
+          </div>
+
+          <form id="inquiry-form" style="margin-top:24px;">
+            <div class="form-group">
+              <label class="form-label" for="c-name">Your Name</label>
+              <input type="text" id="c-name" class="form-input" placeholder="Full name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c-email">Email or Mobile Number</label>
+              <input type="text" id="c-email" class="form-input" placeholder="Email or Phone" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="c-msg">Message / Inquiry</label>
+              <textarea id="c-msg" class="form-textarea" placeholder="How can we assist you?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px;">
+              Send Message →
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================================
+       VIDEO MODAL
+       ======================================================================= -->
+  <div id="modal-video" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Video Player">
+    <div class="modal-window">
+      <button class="modal-close-btn" aria-label="Close modal">×</button>
+      <div class="video-modal-container" style="padding:var(--space-lg);">
+        <!-- Rendered by js/modals.js -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =======================================================================
+       CLEAN FOOTER
+       ======================================================================= -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container-gateway">
+      <div class="footer-main-grid">
+        
+        <div>
+          <div class="footer-brand-title">WeSakhi</div>
+          <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-tertiary); margin-bottom:12px;">wesakhi.com</div>
+          <p style="font-size:0.875rem; color:var(--color-text-secondary); line-height:1.6; max-width:400px;">
+            Official unified platform for Accounts Sakhi (CA &amp; Financial Education) and Sakhi Creations (Handmade in Meerut).
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Accounts Sakhi</div>
+          <ul class="footer-links-list">
+            <li><a href="#/accounts-sakhi" data-route="accounts-sakhi">Educational Hub</a></li>
+            <li><a href="#/accounts-sakhi" data-route="accounts-sakhi">Taxation &amp; GST</a></li>
+            <li><a href="#/accounts-sakhi" data-route="accounts-sakhi">Ind AS Standards</a></li>
+            <li><a href="https://youtube.com" target="_blank" rel="noopener">YouTube Channel ↗</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Sakhi Creations</div>
+          <ul class="footer-links-list">
+            <li><a href="#/sakhi-creations" data-route="sakhi-creations">Handmade Catalog</a></li>
+            <li><a href="https://wa.me/919068711159" target="_blank" rel="noopener">WhatsApp: 9068711159</a></li>
+            <li><a href="#/contact" data-route="contact">Custom Orders</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>&copy; <span id="current-year">2026</span> WeSakhi (wesakhi.com). All rights reserved.</div>
+        <div style="display:flex; gap:16px;">
+          <a href="#/gateway" data-route="gateway">Gateway</a>
+          <a href="#/about" data-route="about">About</a>
+          <a href="#/contact" data-route="contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

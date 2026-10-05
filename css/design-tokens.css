@@ -1,0 +1,100 @@
+/**
+ * Design Tokens — Quiet Luxury & Editorial Indian Modernism
+ * Palette: Warm Ivory, Soft Stone, Deep Charcoal, Muted Sage & Terracotta
+ */
+
+:root {
+  /* Color Palette — Canvas & Surfaces */
+  --color-bg: #FAF8F5;            /* Warm Ivory Canvas */
+  --color-bg-secondary: #F3EFEA;  /* Soft Stone Linen */
+  --color-bg-tertiary: #ECE5DC;   /* Muted Ochre Stone */
+  --color-surface: #FFFFFF;       /* Crisp Pure White */
+  --color-surface-hover: #FCFBF9; /* Subtle Warm White Lift */
+  
+  /* Text & Typography */
+  --color-text-main: #1C1E21;     /* Deep Charcoal */
+  --color-text-secondary: #565A60;/* Muted Editorial Grey */
+  --color-text-tertiary: #888E96; /* Soft Slate Hint */
+  --color-text-light: #FAF8F5;    /* Off-white for dark containers */
+  
+  /* Borders & Dividers */
+  --color-border: #E8E2D8;        /* Soft Linen Border */
+  --color-border-subtle: #F0EBE2; /* Ultra-delicate divider */
+  --color-border-strong: #CFC7BA; /* Defined Charcoal-Stone */
+
+  /* Sub-Brand A: CA & Education (Intellectual, Structured, Deep Slate & Sage) */
+  --ca-primary: #1C2D3D;          /* Deep Oxford Slate */
+  --ca-accent: #2E4B3D;           /* Muted Botanical Sage */
+  --ca-accent-light: #EBF1ED;     /* Sage Morning Wash */
+  --ca-accent-border: #BCD0C4;    /* Sage Linen Border */
+  --ca-tag-bg: #EEF3F0;           /* Soft Sage Pill */
+  --ca-gradient: linear-gradient(135deg, #1C2D3D 0%, #2A435A 100%);
+  
+  /* Sub-Brand B: Handmade Studio (Warm, Tactile, Terracotta & Raw Linen) */
+  --craft-primary: #8C442D;       /* Warm Terracotta */
+  --craft-accent: #BD6E52;        /* Burnt Clay Rose */
+  --craft-accent-light: #F7EFE9;  /* Soft Terracotta Tint */
+  --craft-accent-border: #E4C8BD; /* Terracotta Border */
+  --craft-tag-bg: #F8EFE8;        /* Warm Sand Pill */
+  --craft-gradient: linear-gradient(135deg, #8C442D 0%, #B86246 100%);
+
+  /* Neutrals & Accents */
+  --color-gold: #B68D40;          /* Restrained Muted Gold */
+  --color-gold-light: #F8F4EB;
+  
+  /* Typography Families */
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Mono', 'JetBrains Mono', monospace;
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-md: 1.125rem;   /* 18px */
+  --font-size-lg: 1.25rem;    /* 20px */
+  --font-size-xl: 1.5rem;     /* 24px */
+  --font-size-2xl: 2rem;      /* 32px */
+  --font-size-3xl: 2.75rem;   /* 44px */
+  --font-size-4xl: 3.5rem;    /* 56px */
+  --font-size-5xl: 4.5rem;    /* 72px */
+  --font-size-display: clamp(2.5rem, 5.5vw, 5rem);
+
+  /* Spacing Scale */
+  --space-2xs: 0.25rem;  /* 4px */
+  --space-xs: 0.5rem;    /* 8px */
+  --space-sm: 0.75rem;   /* 12px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  --space-3xl: 4.5rem;   /* 72px */
+  --space-4xl: 6rem;     /* 96px */
+  --space-section: clamp(4rem, 8vw, 8rem);
+
+  /* Layout Containers */
+  --container-max: 1320px;
+  --container-narrow: 940px;
+  --container-gateway: 1400px;
+  --header-height: 80px;
+
+  /* Shadows (Quiet Luxury — Soft & Diffused) */
+  --shadow-subtle: 0 2px 8px rgba(28, 30, 33, 0.04);
+  --shadow-card: 0 8px 30px rgba(28, 30, 33, 0.06);
+  --shadow-hover: 0 16px 45px rgba(28, 30, 33, 0.09);
+  --shadow-modal: 0 24px 60px rgba(28, 30, 33, 0.16);
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Transitions & Easings (Cinematic Luxury Curve) */
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.2s var(--ease-smooth);
+  --transition-normal: 0.4s var(--ease-luxury);
+  --transition-slow: 0.7s var(--ease-luxury);
+}
