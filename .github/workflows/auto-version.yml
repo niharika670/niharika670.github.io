@@ -1,0 +1,62 @@
+name: Auto Cache Version
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Runs on every push to main EXCEPT when version.json itself was the only change
+# (prevents infinite commit loops).
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'version.json'   # Don't re-trigger when this workflow commits version.json
+
+jobs:
+  update-cache-version:
+    name: Bump version.json
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Needed to commit version.json back to the repo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Use the default GITHUB_TOKEN — no PAT needed
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Generate new version
+        id: version
+        run: |
+          # Format: YYYYMMDD-HHmmss-<short-sha>
+          TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION="${TIMESTAMP}-${SHORT_SHA}"
+          DEPLOYED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "DEPLOYED_AT=$DEPLOYED_AT" >> $GITHUB_OUTPUT
+
+          # Write the new version.json
+          cat > version.json <<EOF
+          {"v": "$VERSION", "deployedAt": "$DEPLOYED_AT", "commit": "$SHORT_SHA"}
+          EOF
+
+          echo "Generated version: $VERSION"
+
+      - name: Commit and push version.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add version.json
+
+          # Only commit if version.json actually changed (safety check)
+          if git diff --staged --quiet; then
+            echo "version.json unchanged — nothing to commit."
+          else
+            git commit -m "chore: auto-bump cache version to ${{ steps.version.outputs.VERSION }} [skip ci]"
+            git push
+            echo "Pushed new version: ${{ steps.version.outputs.VERSION }}"
+          fi

@@ -2,9 +2,44 @@
  * Main Application Logic for WeSakhi (wesakhi.com)
  */
 
+// ── Cart localStorage persistence ──────────────────────────────────────────
+const CART_STORAGE_KEY = 'wesakhi_cart_v1';
+
+function saveCartToStorage() {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  } catch (e) {
+    // localStorage unavailable (private browsing quota exceeded etc.) — fail silently
+  }
+}
+
+function loadCartFromStorage() {
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Validate: must be an array with valid cart items
+      if (Array.isArray(parsed)) {
+        cart = parsed.filter(item =>
+          item && typeof item.id === 'string' &&
+          typeof item.price === 'number' &&
+          typeof item.quantity === 'number' && item.quantity > 0
+        );
+      }
+    }
+  } catch (e) {
+    cart = [];
+  }
+}
+// ───────────────────────────────────────────────────────────────────────────
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.Router) window.Router.init();
   if (window.Modals) window.Modals.init();
+  if (window.SplitCards) window.SplitCards.init();
+
+  loadCartFromStorage();   // Restore cart before first render
+  updateCartUI();          // Reflect restored cart in header immediately
 
   renderAccountsSakhi();
   renderSakhiCreations();
@@ -74,22 +109,185 @@ function renderAccountsSakhi(filterCat = 'all') {
   }
 }
 
+// Cart state
+let cart = [];
+let productQuantities = {};
+
+function updateQuantity(productId, change) {
+  if (!productQuantities[productId]) {
+    productQuantities[productId] = 1;
+  }
+  let newQty = productQuantities[productId] + change;
+  if (newQty < 1) newQty = 1;
+  productQuantities[productId] = newQty;
+  const qtyEl = document.getElementById(`qty-${productId}`);
+  if (qtyEl) {
+    qtyEl.textContent = newQty;
+  }
+}
+
+function addToCart(productId) {
+  const data = window.SAKHI_CREATIONS_CONTENT;
+  const product = data.products.find(p => p.id === productId);
+  if (!product) return;
+
+  const qty = productQuantities[productId] || 1;
+  const existingItem = cart.find(item => item.id === productId);
+  
+  if (existingItem) {
+    existingItem.quantity += qty;
+  } else {
+    cart.push({ ...product, quantity: qty });
+  }
+  
+  // Reset local quantity
+  productQuantities[productId] = 1;
+  const qtyEl = document.getElementById(`qty-${productId}`);
+  if (qtyEl) qtyEl.textContent = 1;
+
+  updateCartUI();
+  saveCartToStorage();
+  
+  if (window.Modals && window.Modals.showToast) {
+    window.Modals.showToast(`Added ${qty} × ${product.title} to cart.`);
+  } else {
+    alert(`Added ${qty} ${product.title} to cart.`);
+  }
+}
+
+function updateCartUI() {
+  const cartCount = document.getElementById('cart-count');
+  const cartTotal = document.getElementById('cart-total');
+  const cartDropdownTotal = document.getElementById('cart-dropdown-total');
+  const cartItemsContainer = document.getElementById('cart-items-container');
+  
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  if (cartCount) cartCount.textContent = totalItems;
+  if (cartTotal) cartTotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+  if (cartDropdownTotal) cartDropdownTotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+
+  if (cartItemsContainer) {
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = '<div style="text-align: center; color: var(--color-text-tertiary); padding: 20px 0;">Your cart is empty</div>';
+    } else {
+      cartItemsContainer.innerHTML = cart.map(item => `
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--color-border);">
+          <img src="${item.image}" alt="${item.title}" style="width: 50px; height: 50px; object-fit: contain; background: #FAF8F5; border-radius: 6px; padding: 2px; border: 1px solid var(--color-border);">
+          <div style="flex-grow: 1;">
+            <div style="font-size: 0.9rem; font-weight: 500; line-height: 1.3; margin-bottom: 6px;">${item.title}</div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.95rem; font-weight: 700; color: #17324D;">₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+              <div style="display: flex; align-items: center; border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden; height: 26px;">
+                <button onclick="updateCartItemQuantity('${item.id}', -1)" style="padding: 0 8px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; color: #333; font-weight: bold;">-</button>
+                <span style="padding: 0 10px; font-size: 0.85rem; font-weight: 600; min-width: 20px; text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); height: 100%; display: flex; align-items: center; justify-content: center; background: #fff;">${item.quantity}</span>
+                <button onclick="updateCartItemQuantity('${item.id}', 1)" style="padding: 0 8px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; color: #333; font-weight: bold;">+</button>
+              </div>
+            </div>
+          </div>
+          <button onclick="removeFromCart('${item.id}')" style="background: none; border: none; color: #CC0000; cursor: pointer; font-size: 1.4rem; line-height: 1; padding: 0 5px;" title="Remove item">&times;</button>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+function updateCartItemQuantity(productId, change) {
+  const item = cart.find(i => i.id === productId);
+  if (item) {
+    item.quantity += change;
+    if (item.quantity <= 0) {
+      removeFromCart(productId);
+    } else {
+      updateCartUI();
+      saveCartToStorage();
+    }
+  }
+}
+
+function toggleCartDropdown() {
+  const dropdown = document.getElementById('cart-dropdown');
+  if (dropdown) {
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+      dropdown.style.display = 'flex';
+      updateCartUI(); // Ensure it's up to date when opened
+    } else {
+      dropdown.style.display = 'none';
+    }
+  }
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.id !== productId);
+  updateCartUI();
+  saveCartToStorage();
+}
+
+function checkoutCart() {
+  if (cart.length === 0) {
+    if (window.Modals && window.Modals.showToast) {
+      window.Modals.showToast("Your cart is empty!");
+    } else {
+      alert("Your cart is empty!");
+    }
+    return;
+  }
+
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  
+  let orderDetails = "Hello Sakhi Creations, I would like to place an order for:\n\n";
+  cart.forEach((item, index) => {
+    orderDetails += `${index + 1}. ${item.title} - Qty: ${item.quantity} (₹${(item.price * item.quantity).toLocaleString('en-IN')})\n`;
+  });
+  orderDetails += `\n*Total Amount:* ₹${totalPrice.toLocaleString('en-IN')}`;
+
+  const waLink = `https://wa.me/919068711159?text=${encodeURIComponent(orderDetails)}`;
+  window.open(waLink, '_blank');
+  
+  // Close dropdown after checkout click
+  const dropdown = document.getElementById('cart-dropdown');
+  if (dropdown) dropdown.style.display = 'none';
+}
+
+window.updateQuantity = updateQuantity;
+window.addToCart = addToCart;
+window.toggleCartDropdown = toggleCartDropdown;
+window.removeFromCart = removeFromCart;
+window.checkoutCart = checkoutCart;
+window.updateCartItemQuantity = updateCartItemQuantity;
+
+// Sort state for Sakhi Creations
+let currentSortOrder = 'default';
+
 // Render Sakhi Creations Content
-function renderSakhiCreations(filterCat = 'all') {
+function renderSakhiCreations(filterCat = 'all', sortOrder = currentSortOrder) {
+  currentSortOrder = sortOrder;
   const data = window.SAKHI_CREATIONS_CONTENT;
   if (!data) return;
 
   const productGrid = document.getElementById('creations-product-grid');
   if (productGrid) {
-    const filtered = filterCat === 'all'
-      ? data.products
+    // Step 1: filter by category
+    let filtered = filterCat === 'all'
+      ? data.products.slice()
       : data.products.filter(p => p.category === filterCat);
 
-    productGrid.innerHTML = filtered.map(p => {
-      const waLink = `https://wa.me/919068711159?text=${encodeURIComponent(`Hello Sakhi Creations, I would like to order/inquire about: "${p.title}" (₹${p.price})`)}`;
+    // Step 2: sort
+    if (sortOrder === 'name-asc') {
+      filtered.sort((a, b) => a.title.localeCompare(b.title, 'en', { sensitivity: 'base' }));
+    } else if (sortOrder === 'name-desc') {
+      filtered.sort((a, b) => b.title.localeCompare(a.title, 'en', { sensitivity: 'base' }));
+    } else if (sortOrder === 'price-asc') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === 'price-desc') {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+    // 'default' = original order
 
+    productGrid.innerHTML = filtered.map(p => {
       return `
-        <div class="product-card">
+        <div class="product-card" id="product-${p.id}">
           <div class="product-image-wrap">
             <img src="${p.image}" alt="${p.title}" class="product-image" loading="lazy">
           </div>
@@ -97,12 +295,19 @@ function renderSakhiCreations(filterCat = 'all') {
             <div class="product-origin-badge">Handcrafted in Meerut</div>
             <h4 class="product-name">${p.title}</h4>
             <p class="product-desc-snippet">${p.description}</p>
-            <div class="product-bottom-row">
-              <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
-              <a href="${waLink}" target="_blank" rel="noopener" class="product-order-btn" title="Order via WhatsApp">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
-                Order on WhatsApp
-              </a>
+            <div class="product-footer" style="margin-top: auto; padding-top: 15px;">
+              <div class="product-bottom-row" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span class="product-price" style="font-size: 1.1rem; font-weight: 600;">₹${p.price.toLocaleString('en-IN')}</span>
+                
+                <div class="quantity-toggle" style="display: flex; align-items: center; border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden; height: 32px;">
+                  <button onclick="updateQuantity('${p.id}', -1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">-</button>
+                  <span id="qty-${p.id}" style="padding: 0 12px; font-size: 0.95rem; font-weight: 500; min-width: 30px; text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); height: 100%; display: flex; align-items: center; justify-content: center;">1</span>
+                  <button onclick="updateQuantity('${p.id}', 1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">+</button>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; background: #7A2833; border-color: #7A2833;" onclick="addToCart('${p.id}')">
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -110,6 +315,9 @@ function renderSakhiCreations(filterCat = 'all') {
     }).join('');
   }
 }
+
+// Track active category for Sakhi Creations so sort can re-apply it
+let currentCraftFilter = 'all';
 
 function initFilters() {
   document.querySelectorAll('.js-ca-filter').forEach(btn => {
@@ -124,7 +332,17 @@ function initFilters() {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.js-craft-filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderSakhiCreations(btn.getAttribute('data-cat'));
+      currentCraftFilter = btn.getAttribute('data-cat');
+      renderSakhiCreations(currentCraftFilter, currentSortOrder);
+    });
+  });
+
+  // Sort buttons for Sakhi Creations
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderSakhiCreations(currentCraftFilter, btn.getAttribute('data-sort'));
     });
   });
 }
@@ -160,10 +378,12 @@ function initMobileNav() {
 }
 
 function downloadResource(title) {
-  Modals.showToast(`Downloading: "${title}"...`);
-  setTimeout(() => {
-    Modals.showToast(`✓ "${title}" downloaded successfully.`);
-  }, 1000);
+  if (window.Modals && window.Modals.showToast) {
+    window.Modals.showToast(`Downloading: "${title}"...`);
+    setTimeout(() => {
+      window.Modals.showToast(`✓ "${title}" downloaded successfully.`);
+    }, 1000);
+  }
 }
 
 function initContactForm() {

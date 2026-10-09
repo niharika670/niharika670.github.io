@@ -121,6 +121,7 @@ const SAKHI_CREATIONS_CONTENT = {
   },
   categories: [
     { id: "all", label: "All Creations" },
+    { id: "festive", label: "Festive Collection 2026" },
     { id: "crafts", label: "Handcrafted Decor & Art" },
     { id: "textiles", label: "Linen & Textiles" },
     { id: "journals", label: "Handbound Journals" },
@@ -129,45 +130,155 @@ const SAKHI_CREATIONS_CONTENT = {
   products: [
     {
       id: "prod-01",
-      title: "Handcrafted Terracotta Vessel",
-      category: "pottery",
-      categoryLabel: "Studio Ceramics",
-      price: 1850,
-      image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80",
-      description: "Hand-thrown natural clay vessel crafted slowly on traditional wheels with mineral finish.",
+      title: "Single Urli (Peacock Design)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 160,
+      image: "assets/images/products/image2.jpg",
+      description: "Beautifully handcrafted single urli with elegant peacock designs.",
       origin: "Handcrafted in Meerut",
       inStock: true
     },
     {
       id: "prod-02",
-      title: "Handbound Cotton Rag Journal",
-      category: "journals",
-      categoryLabel: "Handbound Journals",
-      price: 1250,
-      image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1000&q=80",
-      description: "Archival handmade journal crafted with 100% recycled cotton deckled paper and natural fabric binding.",
+      title: "Single Urli (Floral Design)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 80,
+      image: "assets/images/products/image3.jpg",
+      description: "Floral motif single urli, perfect for festive decor.",
       origin: "Handcrafted in Meerut",
       inStock: true
     },
     {
       id: "prod-03",
-      title: "Artisanal Wooden Desk Organizer",
-      category: "crafts",
-      categoryLabel: "Handcrafted Decor & Art",
-      price: 1450,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1000&q=80",
-      description: "Carved from seasoned natural wood, finished with organic oils for study and desk rituals.",
+      title: "Single Urli (Butterfly Design)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 160,
+      image: "assets/images/products/image4.jpg",
+      description: "Delicate butterfly design single urli to elevate your spaces.",
       origin: "Handcrafted in Meerut",
       inStock: true
     },
     {
       id: "prod-04",
-      title: "Handwoven Block-Printed Linen",
-      category: "textiles",
-      categoryLabel: "Linen & Textiles",
-      price: 2200,
-      image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=80",
-      description: "Organic handspun cotton textile featuring traditional handcrafted block prints.",
+      title: "Single Urli (Multi-Peacock)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 125,
+      image: "assets/images/products/image5.jpg",
+      description: "Intricate multi-peacock urli for a grand festive look.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-05",
+      title: "Single Urli (Turtle Base)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 150,
+      image: "assets/images/products/image6.jpg",
+      description: "Auspicious turtle base single urli.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-06",
+      title: "Rangoli Combo (Elephant Theme)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 300,
+      image: "assets/images/products/image7.jpg",
+      description: "Complete rangoli combo featuring an elephant design theme.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-07",
+      title: "Rangoli Combo (Pearl & Red)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 250,
+      image: "assets/images/products/image8.jpg",
+      description: "Stunning pearl and red styled rangoli combo set.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-08",
+      title: "Rangoli Combo (Floral Base)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 300,
+      image: "assets/images/products/image9.jpg",
+      description: "Festive rangoli combo set with floral base details.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-09",
+      title: "Rangoli Combo (Baby Elephant Stand)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 300,
+      image: "assets/images/products/image10.jpg",
+      description: "Festive rangoli combo set featuring a baby elephant stand.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-10",
+      title: "Rangoli Combo (Turtle Base)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 300,
+      image: "assets/images/products/image11.jpg",
+      description: "Beautiful rangoli combo set featuring an auspicious turtle base.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-11",
+      title: "Rangoli Combo (Peacock Set)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 350,
+      image: "assets/images/products/image12.jpg",
+      description: "Elaborate peacock themed rangoli combo set.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-12",
+      title: "Urli with Single Matki (Elephant Stand)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 250,
+      image: "assets/images/products/image13.jpg",
+      description: "Beautiful urli with a single matki resting on an elephant stand.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-13",
+      title: "Urli with Single Matki (Turtle Stand)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 250,
+      image: "assets/images/products/image14.jpg",
+      description: "Elegant urli with a single matki on a turtle stand.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-14",
+      title: "Urli with Single Matki (Sitting Elephant Stand)",
+      category: "festive",
+      categoryLabel: "Festive Collection 2026",
+      price: 250,
+      image: "assets/images/products/image15.jpg",
+      description: "Beautiful handcrafted urli with a single matki resting on a sitting elephant stand.",
       origin: "Handcrafted in Meerut",
       inStock: true
     }
@@ -180,3 +291,4 @@ if (typeof window !== "undefined") {
   window.ACCOUNTS_SAKHI_CONTENT = ACCOUNTS_SAKHI_CONTENT;
   window.SAKHI_CREATIONS_CONTENT = SAKHI_CREATIONS_CONTENT;
 }
+
