@@ -1,48 +1,49 @@
 /**
  * WeSakhi Service Worker — Fully Automatic Cache Version Management
  * ─────────────────────────────────────────────────────────────────
- * NO MANUAL CHANGES EVER NEEDED HERE.
+ * NO MANUAL VERSION BUMPING REQUIRED.
  *
- * How it works:
- *   1. GitHub Actions updates /version.json with a timestamp+SHA on every push.
- *   2. This SW reads /version.json (always bypassing cache) to get the version.
- *   3. On install  → creates a new versioned cache, pre-fetches core assets.
- *   4. On activate → deletes all older wesakhi-* caches automatically.
- *   5. While running → checks version.json every 5 min; if a new deploy is
- *      detected, it notifies the page which then auto-reloads.
+ * Automatic Cache-Busting Mechanism:
+ *   1. GitHub Actions automatically stamps version.json on every push to main.
+ *   2. HTML, JS, and CSS use Network-First strategy with conditional HTTP revalidation:
+ *      - Online users ALWAYS receive the latest code immediately.
+ *      - Offline users are served cached assets seamlessly.
+ *   3. Media & images use Stale-While-Revalidate for maximum speed.
+ *   4. While a user has the page open, a background checker monitors version.json.
+ *      When an update is detected, it broadcasts UPDATE_AVAILABLE to trigger a gentle reload.
  */
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-const CACHE_PREFIX    = 'wesakhi-';
-const META_CACHE      = 'wesakhi-meta';     // Stores SW metadata (current version)
-const VERSION_URL     = '/version.json';
-const VERSION_META_KEY = '/__active-version__';
+const CACHE_PREFIX = 'wesakhi-';
+const META_CACHE = 'wesakhi-meta';
+const VERSION_META_KEY = '/__active_version__';
 
-/** Core assets to pre-fetch and cache on install */
+// Core assets to pre-cache on install using paths relative to SW scope
 const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/css/design-tokens.css',
-  '/css/base.css',
-  '/css/components.css',
-  '/css/views.css',
-  '/js/data.js',
-  '/js/router.js',
-  '/js/modals.js',
-  '/js/main.js',
-  '/assets/images/accounts-sakhi-logo.jpg',
-  '/assets/images/sakhi-creations-logo.jpg',
+  './',
+  './index.html',
+  './css/design-tokens.css',
+  './css/base.css',
+  './css/components.css',
+  './css/views.css',
+  './js/data.js',
+  './js/router.js',
+  './js/modals.js',
+  './js/main.js',
+  './assets/images/accounts-sakhi-logo.jpg',
+  './assets/images/sakhi-creations-logo.jpg',
 ];
 
-// ── Version Helpers ───────────────────────────────────────────────────────────
+function getVersionUrl() {
+  return new URL('version.json', self.registration.scope).href;
+}
 
 /**
- * Fetch the live version from /version.json, always bypassing all caches.
- * Returns the version string, or null on failure.
+ * Fetch the live version from version.json, always bypassing cache.
  */
 async function fetchLiveVersion() {
   try {
-    const resp = await fetch(`${VERSION_URL}?_=${Date.now()}`, {
+    const url = `${getVersionUrl()}?_=${Date.now()}`;
+    const resp = await fetch(url, {
       cache: 'no-store',
       credentials: 'same-origin',
     });
@@ -57,13 +58,12 @@ async function fetchLiveVersion() {
 }
 
 /**
- * Read the version that this SW instance cached during install.
- * Stored in the META_CACHE so it survives SW restarts.
+ * Read the installed version from metadata cache.
  */
 async function getInstalledVersion() {
   try {
     const meta = await caches.open(META_CACHE);
-    const resp  = await meta.match(VERSION_META_KEY);
+    const resp = await meta.match(VERSION_META_KEY);
     if (resp) {
       const data = await resp.json();
       return data.v || null;
@@ -72,7 +72,9 @@ async function getInstalledVersion() {
   return null;
 }
 
-/** Persist the active version to META_CACHE. */
+/**
+ * Persist the installed version into metadata cache.
+ */
 async function setInstalledVersion(v) {
   try {
     const meta = await caches.open(META_CACHE);
@@ -88,12 +90,16 @@ async function setInstalledVersion(v) {
   }
 }
 
-/** Returns the cache name for a given version string. */
 function toCacheName(version) {
   return `${CACHE_PREFIX}${version}`;
 }
 
-/** Send a message to all controlled browser windows/tabs. */
+async function getActiveCache() {
+  const version = await getInstalledVersion();
+  const name = version ? toCacheName(version) : `${CACHE_PREFIX}live`;
+  return caches.open(name);
+}
+
 async function broadcastToClients(payload) {
   try {
     const clients = await self.clients.matchAll({ includeUncontrolled: true, type: 'window' });
@@ -102,76 +108,57 @@ async function broadcastToClients(payload) {
 }
 
 // ── Install ───────────────────────────────────────────────────────────────────
-
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
-    // Always fetch a fresh version on install
     let version = await fetchLiveVersion();
 
-    // Fallback: use the current minute as version (still unique per deploy)
     if (!version) {
       version = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
-      console.warn('[SW] version.json unavailable — using timestamp fallback:', version);
+      console.warn('[SW] Using timestamp version fallback:', version);
     }
 
     const cacheName = toCacheName(version);
-    console.log('[SW] Installing version:', version, '→ cache:', cacheName);
+    console.log('[SW] Installing cache:', cacheName);
 
-    // Pre-cache all core assets (failures are logged but don't abort install)
     const cache = await caches.open(cacheName);
-    const results = await Promise.allSettled(
+    await Promise.allSettled(
       PRECACHE_ASSETS.map(url =>
-        cache.add(url).catch(err => {
-          console.warn('[SW] Pre-cache failed for:', url, '—', err.message);
+        cache.add(new Request(url, { cache: 'reload' })).catch(err => {
+          console.warn('[SW] Pre-cache skip for:', url, err.message);
         })
       )
     );
 
-    const failed = results.filter(r => r.status === 'rejected').length;
-    if (failed > 0) console.warn(`[SW] ${failed} asset(s) could not be pre-cached.`);
-
-    // Store the version so activate + fetch can use it
     await setInstalledVersion(version);
-
-    // Skip waiting: take over immediately without waiting for tabs to close
     await self.skipWaiting();
   })());
 });
 
 // ── Activate ──────────────────────────────────────────────────────────────────
-
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
-    const currentVersion  = await getInstalledVersion();
-    const currentCache    = currentVersion ? toCacheName(currentVersion) : null;
+    const currentVersion = await getInstalledVersion();
+    const currentCache = currentVersion ? toCacheName(currentVersion) : null;
 
-    // Delete every wesakhi-* cache that isn't the current version or the meta cache
     const allCacheKeys = await caches.keys();
     const toDelete = allCacheKeys.filter(
-      key => key.startsWith(CACHE_PREFIX) && key !== currentCache
+      key => key.startsWith(CACHE_PREFIX) && key !== currentCache && key !== META_CACHE
     );
 
     if (toDelete.length > 0) {
-      console.log('[SW] Clearing stale caches:', toDelete);
+      console.log('[SW] Cleaning obsolete caches:', toDelete);
       await Promise.all(toDelete.map(key => caches.delete(key)));
     }
 
-    // Take control of all open tabs immediately
     await self.clients.claim();
-    console.log('[SW] Active. Version:', currentVersion);
+    console.log('[SW] Active & controlling clients. Active version:', currentVersion);
   })());
 });
 
 // ── Periodic Update Check ─────────────────────────────────────────────────────
-
 let lastCheckAt = 0;
 const CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
-/**
- * Compares the live version.json against the installed version.
- * If they differ, broadcasts UPDATE_AVAILABLE so the page can auto-reload.
- * Rate-limited to at most once every CHECK_INTERVAL_MS.
- */
 async function checkForUpdates() {
   const now = Date.now();
   if (now - lastCheckAt < CHECK_INTERVAL_MS) return;
@@ -189,61 +176,58 @@ async function checkForUpdates() {
 }
 
 // ── Fetch Handler ─────────────────────────────────────────────────────────────
-
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Only intercept same-origin GET requests
+  // Only handle same-origin GET requests
   if (url.origin !== self.location.origin || request.method !== 'GET') return;
 
-  // Always let version.json go straight to network (never cache it)
-  if (url.pathname === '/version.json') {
+  // Never cache version.json — always network fresh
+  if (url.pathname.endsWith('/version.json')) {
     event.respondWith(fetch(request, { cache: 'no-store' }));
     return;
   }
 
-  // HTML page navigations — Network First + background update check
+  // 1. Navigation / HTML pages -> Network First (fresh HTML)
   if (request.mode === 'navigate') {
     event.respondWith(handleNavigation(request));
     return;
   }
 
-  // Everything else (CSS, JS, images) — Stale While Revalidate
-  event.respondWith(staleWhileRevalidate(request));
+  // 2. Scripts and Styles -> Network First with conditional revalidation
+  // Ensures any code/CSS updates on server are immediately loaded by online users
+  if (
+    request.destination === 'script' ||
+    request.destination === 'style' ||
+    url.pathname.endsWith('.js') ||
+    url.pathname.endsWith('.css')
+  ) {
+    event.respondWith(handleScriptOrStyle(request));
+    return;
+  }
+
+  // 3. Media, Images, Fonts -> Stale While Revalidate
+  event.respondWith(handleStaticAsset(request));
 });
 
-// ── Fetch Strategies ──────────────────────────────────────────────────────────
-
-/** Get the currently-active cache, falling back gracefully. */
-async function getActiveCache() {
-  const version = await getInstalledVersion();
-  const name    = version ? toCacheName(version) : `${CACHE_PREFIX}fallback`;
-  return caches.open(name);
-}
-
 /**
- * Network First — Always tries the network for fresh HTML.
- * Falls back to cache when offline.
- * Triggers a background update check once per 5-minute window.
+ * Navigation: Network First with offline fallback page
  */
 async function handleNavigation(request) {
   const cache = await getActiveCache();
-
-  // Fire background version check (non-blocking)
   checkForUpdates().catch(() => {});
 
   try {
-    const networkResp = await fetch(request);
+    const networkResp = await fetch(request, { cache: 'no-cache' });
     if (networkResp.ok) {
       cache.put(request, networkResp.clone());
     }
     return networkResp;
   } catch {
-    // Offline — serve cached page or a friendly offline message
-    const cached = await cache.match(request)
-      || await cache.match('/index.html')
-      || await cache.match('/');
+    const cached = await cache.match(request, { ignoreSearch: true })
+      || await cache.match('./index.html', { ignoreSearch: true })
+      || await cache.match('./', { ignoreSearch: true });
 
     return cached || new Response(
       `<!DOCTYPE html>
@@ -251,20 +235,20 @@ async function handleNavigation(request) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WeSakhi — You're Offline</title>
+  <title>WeSakhi — Offline</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; text-align: center;
-           padding: 80px 24px; color: #333; background: #FAF8F5; }
-    h1   { font-size: 2rem; margin-bottom: 12px; }
-    p    { color: #666; max-width: 40ch; margin: 0 auto 24px; line-height: 1.6; }
-    a    { display: inline-block; padding: 10px 24px; background: #7A2833;
-           color: #fff; border-radius: 6px; text-decoration: none; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           text-align: center; padding: 60px 20px; color: #1C1E21; background: #FAF8F5; }
+    h1   { font-size: 2rem; margin-bottom: 12px; font-weight: 600; }
+    p    { color: #565A60; max-width: 440px; margin: 0 auto 24px; line-height: 1.6; }
+    button { padding: 12px 28px; background: #7A2833; color: #fff;
+             border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
   </style>
 </head>
 <body>
   <h1>You're Offline</h1>
-  <p>WeSakhi couldn't be reached. Please check your internet connection and try again.</p>
-  <a href="/">Try Again</a>
+  <p>WeSakhi couldn't connect to the network. Please check your internet connection.</p>
+  <button onclick="window.location.reload()">Retry Connection</button>
 </body>
 </html>`,
       { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
@@ -273,21 +257,38 @@ async function handleNavigation(request) {
 }
 
 /**
- * Stale While Revalidate — serve from cache instantly, refresh in background.
- * Best for CSS, JS, images: user sees fast load, cache stays fresh.
+ * Scripts & Styles: Network First with cache fallback
  */
-async function staleWhileRevalidate(request) {
-  const cache  = await getActiveCache();
-  const cached = await cache.match(request);
+async function handleScriptOrStyle(request) {
+  const cache = await getActiveCache();
 
-  // Always revalidate in the background, regardless of cache hit
-  const revalidate = fetch(request)
-    .then(resp => {
-      if (resp.ok) cache.put(request, resp.clone());
-      return resp;
+  try {
+    const networkResp = await fetch(request, { cache: 'no-cache' });
+    if (networkResp.ok) {
+      cache.put(request, networkResp.clone());
+    }
+    return networkResp;
+  } catch {
+    const cached = await cache.match(request, { ignoreSearch: true });
+    return cached || new Response('', { status: 503, statusText: 'Offline' });
+  }
+}
+
+/**
+ * Static Assets (Images, Fonts): Stale While Revalidate
+ */
+async function handleStaticAsset(request) {
+  const cache = await getActiveCache();
+  const cached = await cache.match(request, { ignoreSearch: true });
+
+  const fetchPromise = fetch(request)
+    .then(networkResp => {
+      if (networkResp.ok) {
+        cache.put(request, networkResp.clone());
+      }
+      return networkResp;
     })
     .catch(() => null);
 
-  // Return cached immediately, or wait for network if no cache
-  return cached ?? (await revalidate) ?? new Response('', { status: 503 });
+  return cached || (await fetchPromise) || new Response('', { status: 503 });
 }

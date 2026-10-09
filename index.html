@@ -11,10 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+  <!-- Cache Prevention Meta Tags for Fresh Browser Loading -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/design-tokens.css">
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css?v=sortfeature1">
+  <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/views.css">
 </head>
 <body>
@@ -66,8 +71,8 @@
                 <span>Total:</span>
                 <span id="cart-dropdown-total">₹0</span>
               </div>
-              <button class="btn btn-primary" style="width: 100%; justify-content: center; background: #7A2833; border-color: #7A2833;" onclick="checkoutCart()">
-                Checkout on WhatsApp
+              <button class="btn btn-primary" style="width: 100%; justify-content: center; background: #7A2833; border-color: #7A2833;" onclick="openOrderCheckoutModal()">
+                Proceed to Order (Enter Address) →
               </button>
             </div>
           </div>
@@ -238,7 +243,7 @@
                 <a href="https://youtube.com" target="_blank" rel="noopener" class="btn" style="background:#CC0000; color:#FFF;">
                   Watch on YouTube Channel ↗
                 </a>
-                <a href="#ca-resources-box" class="btn btn-secondary" onclick="document.getElementById('ca-resources-box').scrollIntoView({behavior:'smooth'})">
+                <a href="#/accounts-sakhi" class="btn btn-secondary" onclick="event.preventDefault(); document.getElementById('ca-resources-box')?.scrollIntoView({behavior:'smooth'});">
                   Free Study Vault ↓
                 </a>
               </div>
@@ -475,6 +480,102 @@
     </div>
   </div>
 
+  <!-- =======================================================================
+       ORDER & DELIVERY ADDRESS CHECKOUT MODAL
+       ======================================================================= -->
+  <div id="modal-order-checkout" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Order and Delivery Address Details">
+    <div class="modal-window" style="max-width: 680px;">
+      <button class="modal-close-btn" aria-label="Close modal">×</button>
+      <div class="checkout-modal-header">
+        <span class="badge" style="background:#FBF1F2; color:#7A2833; margin-bottom:8px;">Direct Studio Order &bull; Sakhi Creations</span>
+        <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--color-text-main); margin-bottom:4px;">Delivery Address &amp; Order Details</h3>
+        <p style="font-size:0.875rem; color:var(--color-text-secondary); line-height:1.5;">
+          No online payment is charged right now. Please provide your delivery details below. Our team is on it and will contact you directly to confirm dispatch.
+        </p>
+      </div>
+
+      <div class="checkout-modal-body">
+        <!-- Order Summary Box -->
+        <div class="checkout-summary-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-family:var(--font-mono); font-size:0.8rem; font-weight:700; color:#7A2833; text-transform:uppercase; letter-spacing:0.06em;">Order Items Summary</span>
+            <span id="checkout-summary-count" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-secondary);">0 items</span>
+          </div>
+          <div id="checkout-summary-items" style="max-height:150px; overflow-y:auto; margin-bottom:12px; font-size:0.875rem; color:var(--color-text-main); border-bottom:1px dashed #D6B8BB; padding-bottom:10px;">
+            <!-- Rendered by js/main.js -->
+          </div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; color:var(--color-text-main);">
+            <span>Total Payable:</span>
+            <span id="checkout-summary-total" style="color:#7A2833;">₹0</span>
+          </div>
+        </div>
+
+        <!-- Address and Contact Form -->
+        <form id="order-checkout-form" novalidate onsubmit="handleOrderSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="order-name">Your Full Name <span style="color:#CC0000;">*</span></label>
+              <input type="text" id="order-name" class="form-input" placeholder="e.g. Priya Sharma" required autocomplete="name">
+              <span class="field-error" id="err-name"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="order-phone">Mobile / WhatsApp Number <span style="color:#CC0000;">*</span></label>
+              <input type="tel" id="order-phone" class="form-input" placeholder="10-digit number (e.g. 9876543210)" required autocomplete="tel" maxlength="15" inputmode="tel">
+              <span class="field-error" id="err-phone"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="order-email">Email Address <span style="color:#CC0000;">*</span></label>
+            <input type="email" id="order-email" class="form-input" placeholder="e.g. priya@example.com" required autocomplete="email" inputmode="email">
+            <span class="field-error" id="err-email"></span>
+            <span style="font-size:0.75rem; color:var(--color-text-tertiary); margin-top:2px;">Our team is on it and will contact you shortly regarding your order.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="order-address">Complete Delivery Address <span style="color:#CC0000;">*</span></label>
+            <textarea id="order-address" class="form-textarea" rows="3" placeholder="Flat/House No., Building/Society, Street, Area/Colony, Landmark" required autocomplete="street-address"></textarea>
+            <span class="field-error" id="err-address"></span>
+          </div>
+
+          <div class="form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="form-group">
+              <label class="form-label" for="order-city">City <span style="color:#CC0000;">*</span></label>
+              <input type="text" id="order-city" class="form-input" placeholder="e.g. Meerut" required autocomplete="address-level2">
+              <span class="field-error" id="err-city"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="order-state">State <span style="color:#CC0000;">*</span></label>
+              <input type="text" id="order-state" class="form-input" placeholder="e.g. Uttar Pradesh" required autocomplete="address-level1">
+              <span class="field-error" id="err-state"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="order-pincode">PIN Code <span style="color:#CC0000;">*</span></label>
+              <input type="text" id="order-pincode" class="form-input" placeholder="6-digit PIN (e.g. 250001)" required autocomplete="postal-code" maxlength="6" inputmode="numeric">
+              <span class="field-error" id="err-pincode"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="order-notes">Special Instructions / Customization Notes (Optional)</label>
+            <textarea id="order-notes" class="form-textarea" rows="2" placeholder="Any specific requirements, delivery timing, or gift packaging note"></textarea>
+          </div>
+
+          <div style="margin-bottom:20px; padding:12px 16px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; font-size:0.8125rem; color:#475569; display:flex; gap:10px; align-items:flex-start;">
+            <span style="font-size:1.1rem; line-height:1;">💡</span>
+            <div>
+              <strong>Payment &amp; Dispatch:</strong> No online payment is required right now. Our team is on it — we will verify stock and contact you directly for UPI / Bank transfer or Cash on Delivery options.
+            </div>
+          </div>
+
+          <button type="submit" id="order-submit-btn" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; background:#7A2833; border-color:#7A2833; font-size:1rem; font-weight:600;">
+            <span>Confirm Order &amp; Send Details →</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
   <!-- =======================================================================
        CLEAN FOOTER
@@ -524,10 +625,10 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/data.js?v=alignedbottom"></script>
-  <script src="js/router.js?v=alignedbottom"></script>
-  <script src="js/modals.js?v=alignedbottom"></script>
-  <script src="js/main.js?v=alignedbottom"></script>
+  <script src="js/data.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/main.js"></script>
   <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
   </script>
@@ -536,25 +637,26 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
+        navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+          .then(registration => {
+            // Check for updates on every page visit
+            registration.update().catch(() => {});
 
-          // Case 1: New SW found while user has the page open (updatefound event)
-          // Happens the first time the SW installs OR when sw.js itself changes.
-          registration.addEventListener('updatefound', () => {
-            const incoming = registration.installing;
-            if (!incoming) return;
+            // Case 1: New SW found while user has the page open (updatefound event)
+            registration.addEventListener('updatefound', () => {
+              const incoming = registration.installing;
+              if (!incoming) return;
 
-            incoming.addEventListener('statechange', () => {
-              if (incoming.state === 'installed' && navigator.serviceWorker.controller) {
-                triggerUpdateUI();
-              }
+              incoming.addEventListener('statechange', () => {
+                if (incoming.state === 'installed' && navigator.serviceWorker.controller) {
+                  triggerUpdateUI();
+                }
+              });
             });
-          });
-
-        }).catch(err => console.warn('[SW] Registration failed:', err));
+          })
+          .catch(err => console.warn('[SW] Registration failed:', err));
 
         // Case 2: SW detected a new version.json while running (UPDATE_AVAILABLE message)
-        // Happens when the user has had the page open for > 5 minutes after a deploy.
         navigator.serviceWorker.addEventListener('message', event => {
           if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
             triggerUpdateUI();
@@ -563,12 +665,15 @@
       });
     }
 
+    let isUpdating = false;
     function triggerUpdateUI() {
+      if (isUpdating) return;
+      isUpdating = true;
       if (window.Modals && window.Modals.showToast) {
-        window.Modals.showToast('🔄 New version available! Refreshing in 2s…');
-        setTimeout(() => window.location.reload(true), 2000);
+        window.Modals.showToast('🔄 Website updated! Refreshing for latest version…');
+        setTimeout(() => window.location.reload(), 1500);
       } else {
-        window.location.reload(true);
+        window.location.reload();
       }
     }
   </script>

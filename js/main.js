@@ -47,7 +47,21 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initFilters();
   initContactForm();
+  initCartEvents();
+  setupOrderValidationEvents();
 });
+
+function initCartEvents() {
+  document.addEventListener('click', (e) => {
+    const container = document.querySelector('.cart-container');
+    const dropdown = document.getElementById('cart-dropdown');
+    if (dropdown && dropdown.style.display === 'flex') {
+      if (container && !container.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    }
+  });
+}
 
 // Render Accounts Sakhi Content
 function renderAccountsSakhi(filterCat = 'all') {
@@ -224,30 +238,345 @@ function removeFromCart(productId) {
   saveCartToStorage();
 }
 
-function checkoutCart() {
+function clearAllOrderErrors() {
+  const errorElements = document.querySelectorAll('#order-checkout-form .field-error');
+  errorElements.forEach(el => {
+    el.textContent = '';
+    el.classList.remove('active');
+  });
+  const inputElements = document.querySelectorAll('#order-checkout-form .input-error');
+  inputElements.forEach(el => el.classList.remove('input-error'));
+}
+
+function setupOrderValidationEvents() {
+  const form = document.getElementById('order-checkout-form');
+  if (!form) return;
+
+  const fields = [
+    { inputId: 'order-name', errId: 'err-name' },
+    { inputId: 'order-phone', errId: 'err-phone' },
+    { inputId: 'order-email', errId: 'err-email' },
+    { inputId: 'order-address', errId: 'err-address' },
+    { inputId: 'order-city', errId: 'err-city' },
+    { inputId: 'order-state', errId: 'err-state' },
+    { inputId: 'order-pincode', errId: 'err-pincode' }
+  ];
+
+  fields.forEach(({ inputId, errId }) => {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('input', () => {
+      input.classList.remove('input-error');
+      const errEl = document.getElementById(errId);
+      if (errEl) {
+        errEl.textContent = '';
+        errEl.classList.remove('active');
+      }
+    });
+  });
+
+  // Dedicated PIN Code numeric constraint (maximum 6 digits)
+  const pinInput = document.getElementById('order-pincode');
+  if (pinInput) {
+    pinInput.addEventListener('input', () => {
+      pinInput.value = pinInput.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+  }
+
+  // Dedicated mobile number character filter
+  const phoneInput = document.getElementById('order-phone');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/[^0-9+\s\-]/g, '');
+    });
+  }
+}
+
+function validateOrderForm() {
+  let isValid = true;
+  let firstInvalidEl = null;
+
+  function setError(inputId, errId, message) {
+    const input = document.getElementById(inputId);
+    const errEl = document.getElementById(errId);
+    if (input) input.classList.add('input-error');
+    if (errEl) {
+      errEl.textContent = message;
+      errEl.classList.add('active');
+    }
+    isValid = false;
+    if (!firstInvalidEl && input) firstInvalidEl = input;
+  }
+
+  function clearError(inputId, errId) {
+    const input = document.getElementById(inputId);
+    const errEl = document.getElementById(errId);
+    if (input) input.classList.remove('input-error');
+    if (errEl) {
+      errEl.textContent = '';
+      errEl.classList.remove('active');
+    }
+  }
+
+  // 1. Full Name check
+  const nameEl = document.getElementById('order-name');
+  const nameVal = nameEl ? nameEl.value.trim() : '';
+  if (!nameVal || nameVal.length < 2) {
+    setError('order-name', 'err-name', 'Please enter your full name (at least 2 characters).');
+  } else {
+    clearError('order-name', 'err-name');
+  }
+
+  // 2. Mobile Number Validation Check
+  const phoneEl = document.getElementById('order-phone');
+  const phoneVal = phoneEl ? phoneEl.value.trim() : '';
+  const cleanPhone = phoneVal.replace(/[\s\-\(\)\.]/g, '');
+  // Standard Indian 10-digit mobile check (optional +91, 91, or 0 prefix, first digit 6-9)
+  const indianMobileRegex = /^(?:\+91|91|0)?[6-9]\d{9}$/;
+  // General valid international 10 to 14 digit mobile number
+  const generalMobileRegex = /^\+?[0-9]{10,14}$/;
+
+  if (!phoneVal) {
+    setError('order-phone', 'err-phone', 'Please enter your 10-digit mobile number.');
+  } else if (!indianMobileRegex.test(cleanPhone) && !generalMobileRegex.test(cleanPhone)) {
+    setError('order-phone', 'err-phone', 'Please enter a valid 10-digit mobile number (e.g. 9876543210).');
+  } else {
+    clearError('order-phone', 'err-phone');
+  }
+
+  // 3. Email Address Validation Check
+  const emailEl = document.getElementById('order-email');
+  const emailVal = emailEl ? emailEl.value.trim() : '';
+  // Comprehensive RFC 5322-compliant email regex
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+  if (!emailVal) {
+    setError('order-email', 'err-email', 'Please enter your email address.');
+  } else if (!emailRegex.test(emailVal) || emailVal.includes('..')) {
+    setError('order-email', 'err-email', 'Please enter a valid email address (e.g. yourname@domain.com).');
+  } else {
+    clearError('order-email', 'err-email');
+  }
+
+  // 4. Delivery Address check
+  const addressEl = document.getElementById('order-address');
+  const addressVal = addressEl ? addressEl.value.trim() : '';
+  if (!addressVal || addressVal.length < 8) {
+    setError('order-address', 'err-address', 'Please provide a complete delivery address (House/Flat No., Street, Area).');
+  } else {
+    clearError('order-address', 'err-address');
+  }
+
+  // 5. City check
+  const cityEl = document.getElementById('order-city');
+  const cityVal = cityEl ? cityEl.value.trim() : '';
+  if (!cityVal || cityVal.length < 2) {
+    setError('order-city', 'err-city', 'Please enter your city name.');
+  } else {
+    clearError('order-city', 'err-city');
+  }
+
+  // 6. State check
+  const stateEl = document.getElementById('order-state');
+  const stateVal = stateEl ? stateEl.value.trim() : '';
+  if (!stateVal || stateVal.length < 2) {
+    setError('order-state', 'err-state', 'Please enter your state.');
+  } else {
+    clearError('order-state', 'err-state');
+  }
+
+  // 7. PIN Code Validation Check
+  const pinEl = document.getElementById('order-pincode');
+  const pinVal = pinEl ? pinEl.value.trim() : '';
+  // Standard 6-digit Indian Postal PIN code (cannot start with 0)
+  const pincodeRegex = /^[1-9][0-9]{5}$/;
+
+  if (!pinVal) {
+    setError('order-pincode', 'err-pincode', 'Please enter your 6-digit PIN code.');
+  } else if (!pincodeRegex.test(pinVal)) {
+    setError('order-pincode', 'err-pincode', 'Please enter a valid 6-digit PIN code (e.g. 250001).');
+  } else {
+    clearError('order-pincode', 'err-pincode');
+  }
+
+  if (firstInvalidEl) {
+    firstInvalidEl.focus();
+  }
+
+  return isValid;
+}
+
+function openOrderCheckoutModal() {
   if (cart.length === 0) {
     if (window.Modals && window.Modals.showToast) {
-      window.Modals.showToast("Your cart is empty!");
+      window.Modals.showToast("Your cart is empty! Please add products first.");
     } else {
       alert("Your cart is empty!");
     }
     return;
   }
 
-  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  
-  let orderDetails = "Hello Sakhi Creations, I would like to place an order for:\n\n";
-  cart.forEach((item, index) => {
-    orderDetails += `${index + 1}. ${item.title} - Qty: ${item.quantity} (₹${(item.price * item.quantity).toLocaleString('en-IN')})\n`;
-  });
-  orderDetails += `\n*Total Amount:* ₹${totalPrice.toLocaleString('en-IN')}`;
-
-  const waLink = `https://wa.me/919068711159?text=${encodeURIComponent(orderDetails)}`;
-  window.open(waLink, '_blank');
-  
-  // Close dropdown after checkout click
+  // Close cart dropdown
   const dropdown = document.getElementById('cart-dropdown');
   if (dropdown) dropdown.style.display = 'none';
+
+  // Clear any existing validation errors
+  clearAllOrderErrors();
+
+  // Render items summary in modal
+  const summaryCount = document.getElementById('checkout-summary-count');
+  const summaryItems = document.getElementById('checkout-summary-items');
+  const summaryTotal = document.getElementById('checkout-summary-total');
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  if (summaryCount) summaryCount.textContent = `${totalItems} item${totalItems > 1 ? 's' : ''}`;
+  if (summaryTotal) summaryTotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+
+  if (summaryItems) {
+    summaryItems.innerHTML = cart.map((item, idx) => `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="padding-right:12px;">
+          <span style="font-weight:600;">${idx + 1}. ${item.title}</span>
+          <span style="color:var(--color-text-tertiary); font-size:0.8rem;"> &times; ${item.quantity}</span>
+        </div>
+        <span style="font-weight:600; white-space:nowrap;">₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+      </div>
+    `).join('');
+  }
+
+  // Open modal
+  const modal = document.getElementById('modal-order-checkout');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+async function handleOrderSubmit(e) {
+  e.preventDefault();
+
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  // Perform client-side validation checks
+  if (!validateOrderForm()) {
+    return;
+  }
+
+  const submitBtn = document.getElementById('order-submit-btn');
+  const originalBtnContent = submitBtn ? submitBtn.innerHTML : 'Submit';
+
+  const name = document.getElementById('order-name').value.trim();
+  const phone = document.getElementById('order-phone').value.trim();
+  const email = document.getElementById('order-email').value.trim();
+  const address = document.getElementById('order-address').value.trim();
+  const city = document.getElementById('order-city').value.trim();
+  const state = document.getElementById('order-state').value.trim();
+  const pincode = document.getElementById('order-pincode').value.trim();
+  const notes = document.getElementById('order-notes').value.trim();
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const fullAddress = `${address}, ${city}, ${state} - ${pincode}`;
+
+  let itemsSummary = '';
+  cart.forEach((item, idx) => {
+    itemsSummary += `${idx + 1}. ${item.title} — Qty: ${item.quantity} (₹${(item.price * item.quantity).toLocaleString('en-IN')})\n`;
+  });
+
+  const orderId = `WS-${Date.now().toString().slice(-6)}`;
+
+  // Show loading feedback on submit button
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Sending Order to Studio... ⏳</span>';
+  }
+
+  const payload = {
+    _subject: `New WeSakhi Order #${orderId} from ${name}`,
+    _replyto: email,
+    _template: 'table',
+    'Order ID': orderId,
+    'Customer Name': name,
+    'Contact Number': phone,
+    'Customer Email': email,
+    'PIN Code': pincode,
+    'Delivery Address': fullAddress,
+    'Street / Area': address,
+    'City': city,
+    'State': state,
+    'Products Ordered': itemsSummary,
+    'Total Items': totalItems,
+    'Total Amount': `₹${totalPrice.toLocaleString('en-IN')}`,
+    'Special Instructions': notes || 'None',
+    'Order Placed At': new Date().toLocaleString('en-IN')
+  };
+
+  // 1. Send formatted email to niharika@wesakhi.com
+  try {
+    await fetch('https://formsubmit.co/ajax/niharika@wesakhi.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('[Order] Email API notification:', err);
+  }
+
+  // 2. Construct direct WhatsApp order with complete address and PIN code
+  let waMessage = `*New Order Placed on WeSakhi!*\n`;
+  waMessage += `*Order ID:* ${orderId}\n\n`;
+  waMessage += `*Customer Details:*\n`;
+  waMessage += `• *Name:* ${name}\n`;
+  waMessage += `• *Phone:* ${phone}\n`;
+  waMessage += `• *Email:* ${email}\n`;
+  waMessage += `• *Delivery Address:* ${fullAddress}\n`;
+  waMessage += `• *PIN Code:* ${pincode}\n`;
+  if (notes) waMessage += `• *Notes:* ${notes}\n`;
+  waMessage += `\n*Products Ordered:*\n${itemsSummary}\n`;
+  waMessage += `*Total Amount:* ₹${totalPrice.toLocaleString('en-IN')}`;
+
+  const waUrl = `https://wa.me/919068711159?text=${encodeURIComponent(waMessage)}`;
+  window.open(waUrl, '_blank');
+
+  // Close modal
+  const modal = document.getElementById('modal-order-checkout');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+
+  // Clear cart and storage
+  cart = [];
+  updateCartUI();
+  saveCartToStorage();
+
+  // Reset form
+  const form = document.getElementById('order-checkout-form');
+  if (form) form.reset();
+  clearAllOrderErrors();
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnContent;
+  }
+
+  // Toast confirmation
+  if (window.Modals && window.Modals.showToast) {
+    window.Modals.showToast(`✓ Order #${orderId} confirmed! Our team is on it and will contact you shortly.`);
+  } else {
+    alert(`Thank you, ${name}! Your order #${orderId} has been confirmed. Our team is on it!`);
+  }
+}
+
+// Backward-compatible alias
+function checkoutCart() {
+  openOrderCheckoutModal();
 }
 
 window.updateQuantity = updateQuantity;
@@ -255,7 +584,10 @@ window.addToCart = addToCart;
 window.toggleCartDropdown = toggleCartDropdown;
 window.removeFromCart = removeFromCart;
 window.checkoutCart = checkoutCart;
+window.openOrderCheckoutModal = openOrderCheckoutModal;
+window.handleOrderSubmit = handleOrderSubmit;
 window.updateCartItemQuantity = updateCartItemQuantity;
+window.validateOrderForm = validateOrderForm;
 
 // Sort state for Sakhi Creations
 let currentSortOrder = 'default';
@@ -391,7 +723,9 @@ function initContactForm() {
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      Modals.showToast('Thank you! Your message has been sent to WeSakhi.');
+      if (window.Modals && window.Modals.showToast) {
+        window.Modals.showToast('Thank you! Your message has been sent to WeSakhi.');
+      }
       form.reset();
     });
   }

@@ -716,3 +716,103 @@
   flex-wrap: wrap;
   gap: var(--space-md);
 }
+
+/* ==========================================================================
+   6. FORM CONTROLS & CHECKOUT MODAL STYLES
+   ========================================================================== */
+.form-group {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-main);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  color: var(--color-text-main);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #7A2833;
+  box-shadow: 0 0 0 3px rgba(122, 40, 51, 0.12);
+  background-color: #FFFFFF;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.checkout-modal-header {
+  padding: 24px 28px 18px 28px;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.checkout-modal-body {
+  padding: 24px 28px 28px 28px;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.checkout-summary-box {
+  background-color: #FAF4F5;
+  border: 1px solid #ECD7D9;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0;
+  }
+  .checkout-modal-header,
+  .checkout-modal-body {
+    padding: 18px 16px;
+  }
+}
+
+/* Validation Feedback Styles */
+.form-input.input-error,
+.form-textarea.input-error {
+  border-color: #CC0000 !important;
+  background-color: #FFF9F9;
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.12) !important;
+}
+
+.field-error {
+  color: #CC0000;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  margin-top: 5px;
+  display: none;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.field-error.active {
+  display: block;
+}

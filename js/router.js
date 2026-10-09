@@ -55,6 +55,16 @@ const Router = {
 
   handleRoute() {
     const hash = window.location.hash || '#/';
+
+    // If it's an in-page anchor (e.g. #ca-resources-box) rather than a view route (#/...)
+    if (hash.startsWith('#') && !hash.startsWith('#/')) {
+      const targetEl = document.querySelector(hash);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+
     const targetView = this.routes[hash] || 'gateway';
     this.currentRoute = targetView;
 

@@ -19,6 +19,9 @@ const Modals = {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.closeAllModals();
+        const cartDropdown = document.getElementById('cart-dropdown');
+        if (cartDropdown) cartDropdown.style.display = 'none';
+        if (window.closeMobileNav) window.closeMobileNav();
       }
     });
   },
@@ -61,6 +64,10 @@ const Modals = {
   },
 
   closeAllModals() {
+    // Stop any playing video iframes to prevent audio leak
+    document.querySelectorAll('.modal-backdrop iframe').forEach(iframe => {
+      iframe.src = '';
+    });
     document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('active'));
     document.body.style.overflow = '';
   },
