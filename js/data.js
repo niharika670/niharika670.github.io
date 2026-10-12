@@ -121,12 +121,101 @@ const SAKHI_CREATIONS_CONTENT = {
   },
   categories: [
     { id: "all", label: "All Designs" },
+    { id: "tealight-rangoli", label: "Tealight Rangoli Collection" },
     { id: "shubh-labh", label: "Shubh Labh Collection" },
     { id: "single-urli", label: "Single Urli" },
     { id: "rangoli-combo", label: "Rangoli Combo" },
     { id: "urli-matki", label: "Urli with Single Matki" }
   ],
   products: [
+    {
+      id: "prod-tealight-rangoli-01",
+      title: "Ruby Pearl Diya Rangoli",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 250,
+      image: "assets/images/products/tealight-rangoli-01.jpg",
+      description: "Ruby Pearl Diya Rangoli handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-02",
+      title: "Matki Marigold Tealight",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 70,
+      image: "assets/images/products/tealight-rangoli-02.jpg",
+      description: "Matki Marigold Tealight handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-03",
+      title: "Mayur Ratna Glow",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 70,
+      image: "assets/images/products/tealight-rangoli-03.jpg",
+      description: "Mayur Ratna Glow handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-04",
+      title: "Shubh Milan Diya",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 225,
+      image: "assets/images/products/tealight-rangoli-04.jpg",
+      description: "Shubh Milan Diya handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-05",
+      title: "Swarna Pushp Rangoli",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 300,
+      image: "assets/images/products/tealight-rangoli-05.jpg",
+      description: "Swarna Pushp Rangoli handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-06",
+      title: "Gajraj Festive Circle",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 300,
+      image: "assets/images/products/tealight-rangoli-06.jpg",
+      description: "Gajraj Festive Circle handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-07",
+      title: "Hansini Pearl Blossom",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 70,
+      image: "assets/images/products/tealight-rangoli-07.jpg",
+      description: "Hansini Pearl Blossom handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-08",
+      title: "Gau Gauri Golden Glow",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 70,
+      image: "assets/images/products/tealight-rangoli-08.jpg",
+      description: "Gau Gauri Golden Glow handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
     {
       id: "prod-shubh-labh-01",
       title: "Deepotsav Floral Mandala",
