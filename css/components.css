@@ -494,10 +494,16 @@
 }
 
 .product-price {
-  font-family: var(--font-serif);
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+  letter-spacing: 0;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  display: inline-flex;
+  align-items: baseline;
 }
 
 .product-order-btn {
@@ -514,34 +520,134 @@
   text-decoration: none;
 }
 
-/* Sort Bar — Sakhi Creations */
-.sort-bar {
+/* Filter & Sort Controls — Sakhi Creations & Platforms */
+
+/* Filter & Sort Controls — Sakhi Creations & Platforms */
+
+/* Reorganized multi-tier filter & sort container */
+.catalog-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-lg);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Tier 1: Dedicated Category Filters Section */
+.category-filter-section {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  margin-top: var(--space-md);
-  margin-bottom: var(--space-xl);
   flex-wrap: wrap;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.sort-label {
+/* Tier 2: Dedicated Sort & Secondary Filter Section */
+.sort-filter-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-top: var(--space-xs);
+}
+
+.control-section-label,
+.sort-label,
+.filter-label {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-text-tertiary);
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
+  min-width: 95px;
 }
 
-.sort-btn-group {
+/* Button groups for responsive wrap */
+.category-btn-group,
+.sort-btn-group,
+.filter-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+/* Base button styling for categories, filters, and sort options */
+.category-btn,
+.sort-btn,
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background-color: #FFFFFF;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.category-btn:hover,
+.sort-btn:hover,
+.filter-btn:hover {
+  border-color: #7A2833;
+  color: #7A2833;
+  background-color: #FBF1F2;
+  transform: translateY(-1px);
+}
+
+.category-btn:focus-visible,
+.sort-btn:focus-visible,
+.filter-btn:focus-visible {
+  outline: 2px solid #7A2833;
+  outline-offset: 2px;
+}
+
+/* Selected / Active state for category buttons */
+.category-btn.active,
+.sort-btn.active,
+.filter-btn.active {
+  background-color: #7A2833;
+  border-color: #7A2833;
+  color: #FAF8F5;
+  box-shadow: 0 2px 6px rgba(122, 40, 51, 0.25);
+}
+
+/* Legacy filter pills (Accounts Sakhi) */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.filter-btn-group {
   display: flex;
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
 }
 
-.sort-btn {
+.filter-btn {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
@@ -556,16 +662,73 @@
   white-space: nowrap;
 }
 
-.sort-btn:hover {
+.filter-btn:hover {
   border-color: #7A2833;
   color: #7A2833;
   background-color: #FBF1F2;
 }
 
-.sort-btn.active {
+.filter-btn.active {
   background-color: #7A2833;
   border-color: #7A2833;
   color: #FAF8F5;
+}
+
+.filter-btn.js-ca-filter:hover {
+  border-color: #17324D;
+  color: #17324D;
+  background-color: #EBF2F7;
+}
+
+.filter-btn.js-ca-filter.active {
+  background-color: #17324D;
+  border-color: #17324D;
+  color: #FAF8F5;
+}
+
+/* Category Subtopic Sections */
+.product-catalog-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+.product-category-section {
+  position: relative;
+}
+
+.category-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: var(--space-xl);
+  border-bottom: 2px solid var(--color-border-subtle);
+}
+
+.category-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.category-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #7A2833;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.category-count {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 
@@ -785,6 +948,25 @@
 }
 
 @media (max-width: 640px) {
+  .catalog-controls-container {
+    padding: 14px;
+    gap: 12px;
+  }
+  .category-filter-section,
+  .sort-filter-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .category-btn-group,
+  .sort-btn-group {
+    width: 100%;
+  }
+  .category-btn,
+  .sort-btn {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
   .form-row {
     grid-template-columns: 1fr !important;
     gap: 0;

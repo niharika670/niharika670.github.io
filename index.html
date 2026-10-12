@@ -78,10 +78,10 @@
           </div>
         </div>
 
-        <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="whatsapp-direct-btn" title="Chat on WhatsApp">
+        <div class="whatsapp-direct-btn" title="Call or WhatsApp for inquiries" style="cursor: default;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
           <span>9068711159</span>
-        </a>
+        </div>
 
         <!-- Mobile Menu Toggle -->
         <button class="mobile-menu-btn" aria-label="Open Mobile Menu">
@@ -192,10 +192,6 @@
                 <a href="#/sakhi-creations" class="btn-primary-action" data-route="sakhi-creations">
                   <span>Explore Sakhi Creations Shop</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-                <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="btn-secondary-action" style="color:#1E88E5;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" color="#25D366"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
-                  <span>Order on WhatsApp (9068711159)</span>
                 </a>
               </div>
             </div>
@@ -328,13 +324,13 @@
                 Where Her Hands Create Her Future.
               </h1>
               <p style="font-size:1.05rem; line-height:1.65; margin-bottom:24px; color:var(--color-text-secondary);">
-                Authentic handmade products, handbound cotton journals, studio ceramics, and artisanal decor crafted lovingly in Meerut. Order directly via WhatsApp or phone.
+                Authentic handmade products, handbound cotton journals, studio ceramics, and artisanal decor crafted lovingly in Meerut.
               </p>
               <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-                <a href="https://wa.me/919068711159" target="_blank" rel="noopener" class="whatsapp-direct-btn" style="padding:10px 22px; font-size:0.9rem;">
+                <div class="whatsapp-direct-btn" title="Call or WhatsApp for inquiries" style="cursor: default; padding:10px 22px; font-size:0.9rem;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.981.536 1.777.82 2.796.82 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.766-5.769-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.701 0-3.32-.429-4.757-1.196l-5.243 1.375 1.4-5.109c-.838-1.488-1.4-3.237-1.4-5.07 0-5.514 4.486-10 10-10s10 4.486 10 10z"/></svg>
-                  <span>Order via WhatsApp (9068711159)</span>
-                </a>
+                  <span>Inquiries: 9068711159</span>
+                </div>
               </div>
             </div>
 
@@ -351,32 +347,33 @@
           <div class="section-header">
             <span class="section-eyebrow" style="color:#7A2833;">Studio Catalog</span>
             <h2 class="section-title">Handcrafted Creations</h2>
-            <p class="section-subtitle">Click "Order on WhatsApp" on any piece to place an order or ask for custom sizing.</p>
+            <p class="section-subtitle">Browse designs below and click "Add to Cart" to place your order directly through checkout.</p>
           </div>
 
-          <!-- Filter Pills -->
-          <div class="filter-bar">
-            <button class="filter-btn js-craft-filter active" data-cat="all">All Creations</button>
-            <button class="filter-btn js-craft-filter" data-cat="festive">Festive Collection 2026</button>
-            <button class="filter-btn js-craft-filter" data-cat="crafts">Decor &amp; Art</button>
-            <button class="filter-btn js-craft-filter" data-cat="textiles">Linen &amp; Textiles</button>
-            <button class="filter-btn js-craft-filter" data-cat="journals">Handbound Journals</button>
-            <button class="filter-btn js-craft-filter" data-cat="pottery">Studio Ceramics</button>
-          </div>
+          <!-- Filter & Sort Container: Two dedicated vertical tiers -->
+          <div class="catalog-controls-container">
+            <!-- Tier 1: Category Filter Buttons (Dynamically Populated) -->
+            <div class="category-filter-section">
+              <span class="control-section-label">Categories:</span>
+              <div class="category-btn-group" id="craft-category-buttons" role="tablist" aria-label="Product Categories">
+                <!-- Dynamically populated from SAKHI_CREATIONS_CONTENT.categories -->
+              </div>
+            </div>
 
-          <!-- Sort Controls -->
-          <div class="sort-bar">
-            <span class="sort-label">Sort by:</span>
-            <div class="sort-btn-group">
-              <button class="sort-btn active" data-sort="default" id="sort-default">Default</button>
-              <button class="sort-btn" data-sort="name-asc" id="sort-name-asc">Name A–Z</button>
-              <button class="sort-btn" data-sort="name-desc" id="sort-name-desc">Name Z–A</button>
-              <button class="sort-btn" data-sort="price-asc" id="sort-price-asc">Price ↑</button>
-              <button class="sort-btn" data-sort="price-desc" id="sort-price-desc">Price ↓</button>
+            <!-- Tier 2: Sorting and Filter Controls -->
+            <div class="sort-filter-section">
+              <span class="control-section-label">Sort &amp; Filter:</span>
+              <div class="sort-btn-group" role="group" aria-label="Sort Options">
+                <button class="sort-btn active" data-sort="default" id="sort-default">Default</button>
+                <button class="sort-btn" data-sort="name-asc" id="sort-name-asc">Name A–Z</button>
+                <button class="sort-btn" data-sort="name-desc" id="sort-name-desc">Name Z–A</button>
+                <button class="sort-btn" data-sort="price-asc" id="sort-price-asc">Price ↑</button>
+                <button class="sort-btn" data-sort="price-desc" id="sort-price-desc">Price ↓</button>
+              </div>
             </div>
           </div>
 
-          <div id="creations-product-grid" class="product-grid">
+          <div id="creations-product-grid" class="product-catalog-container">
             <!-- Rendered by js/main.js -->
           </div>
         </div>
@@ -430,8 +427,8 @@
 
         <div class="contact-card">
           <div class="contact-info-row">
-            <span style="font-weight:600; color:var(--color-text-main);">📞 Phone / WhatsApp:</span>
-            <a href="https://wa.me/919068711159" target="_blank" rel="noopener" style="color:#25D366; font-weight:700;">+91 9068711159</a>
+            <span style="font-weight:600; color:var(--color-text-main);">📞 Phone / Inquiries:</span>
+            <span style="font-weight:700; color:var(--color-text-main);">+91 9068711159</span>
           </div>
 
           <div class="contact-info-row">
@@ -606,7 +603,7 @@
           <div class="footer-col-title">Sakhi Creations</div>
           <ul class="footer-links-list">
             <li><a href="#/sakhi-creations" data-route="sakhi-creations">Handmade Catalog</a></li>
-            <li><a href="https://wa.me/919068711159" target="_blank" rel="noopener">WhatsApp: 9068711159</a></li>
+            <li style="color:var(--color-text-secondary);">Inquiries: 9068711159</li>
             <li><a href="#/contact" data-route="contact">Custom Orders</a></li>
           </ul>
         </div>
@@ -625,10 +622,10 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/router.js"></script>
-  <script src="js/modals.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/data.js?v=20261012-shubh-labh"></script>
+  <script src="js/router.js?v=20261012-shubh-labh"></script>
+  <script src="js/modals.js?v=20261012-shubh-labh"></script>
+  <script src="js/main.js?v=20261012-shubh-labh"></script>
   <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
   </script>

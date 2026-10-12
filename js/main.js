@@ -588,68 +588,212 @@ window.openOrderCheckoutModal = openOrderCheckoutModal;
 window.handleOrderSubmit = handleOrderSubmit;
 window.updateCartItemQuantity = updateCartItemQuantity;
 window.validateOrderForm = validateOrderForm;
+window.selectCraftCategory = selectCraftCategory;
 
 // Sort state for Sakhi Creations
 let currentSortOrder = 'default';
 
-// Render Sakhi Creations Content
-function renderSakhiCreations(filterCat = 'all', sortOrder = currentSortOrder) {
+function renderProductCardHTML(p) {
+  const currentQty = productQuantities[p.id] || 1;
+  return `
+    <div class="product-card" id="product-${p.id}">
+      <div class="product-image-wrap">
+        <img src="${p.image}" alt="${p.title}" class="product-image" loading="lazy" onerror="this.onerror=null; this.src='assets/images/sakhi-creations-logo.jpg'; this.style.objectFit='contain'; this.style.padding='16px';">
+      </div>
+      <div class="product-info">
+        <div class="product-origin-badge">Handcrafted in Meerut</div>
+        <h4 class="product-name">${p.title}</h4>
+        <p class="product-desc-snippet">${p.description}</p>
+        <div class="product-footer" style="margin-top: auto; padding-top: 15px;">
+          <div class="product-bottom-row" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <span class="product-price">₹${p.price.toLocaleString('en-IN')}</span>
+            
+            <div class="quantity-toggle" style="display: flex; align-items: center; border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden; height: 32px;">
+              <button onclick="updateQuantity('${p.id}', -1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">-</button>
+              <span id="qty-${p.id}" style="padding: 0 12px; font-size: 0.95rem; font-weight: 500; min-width: 30px; text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); height: 100%; display: flex; align-items: center; justify-content: center;">${currentQty}</span>
+              <button onclick="updateQuantity('${p.id}', 1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">+</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; background: #7A2833; border-color: #7A2833;" onclick="addToCart('${p.id}')">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function sortProductsList(items, sortOrder) {
+  const list = items.slice();
+  if (sortOrder === 'name-asc') {
+    list.sort((a, b) => a.title.localeCompare(b.title, 'en', { sensitivity: 'base' }));
+  } else if (sortOrder === 'name-desc') {
+    list.sort((a, b) => b.title.localeCompare(a.title, 'en', { sensitivity: 'base' }));
+  } else if (sortOrder === 'price-asc') {
+    list.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === 'price-desc') {
+    list.sort((a, b) => b.price - a.price);
+  }
+  return list;
+}
+
+// Render Sakhi Creations Content:
+// - When filterCat === 'all': single, continuous, uninterrupted product grid without category headings or gaps
+// - When filterCat is a specific category: category-specific section with header and count
+function renderSakhiCreations(filterCat = currentCraftFilter, sortOrder = currentSortOrder) {
+  currentCraftFilter = filterCat;
   currentSortOrder = sortOrder;
   const data = window.SAKHI_CREATIONS_CONTENT;
   if (!data) return;
 
   const productGrid = document.getElementById('creations-product-grid');
-  if (productGrid) {
-    // Step 1: filter by category
-    let filtered = filterCat === 'all'
-      ? data.products.slice()
-      : data.products.filter(p => p.category === filterCat);
+  if (!productGrid) return;
 
-    // Step 2: sort
-    if (sortOrder === 'name-asc') {
-      filtered.sort((a, b) => a.title.localeCompare(b.title, 'en', { sensitivity: 'base' }));
-    } else if (sortOrder === 'name-desc') {
-      filtered.sort((a, b) => b.title.localeCompare(a.title, 'en', { sensitivity: 'base' }));
-    } else if (sortOrder === 'price-asc') {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortOrder === 'price-desc') {
-      filtered.sort((a, b) => b.price - a.price);
-    }
-    // 'default' = original order
-
-    productGrid.innerHTML = filtered.map(p => {
-      return `
-        <div class="product-card" id="product-${p.id}">
-          <div class="product-image-wrap">
-            <img src="${p.image}" alt="${p.title}" class="product-image" loading="lazy">
-          </div>
-          <div class="product-info">
-            <div class="product-origin-badge">Handcrafted in Meerut</div>
-            <h4 class="product-name">${p.title}</h4>
-            <p class="product-desc-snippet">${p.description}</p>
-            <div class="product-footer" style="margin-top: auto; padding-top: 15px;">
-              <div class="product-bottom-row" style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <span class="product-price" style="font-size: 1.1rem; font-weight: 600;">₹${p.price.toLocaleString('en-IN')}</span>
-                
-                <div class="quantity-toggle" style="display: flex; align-items: center; border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden; height: 32px;">
-                  <button onclick="updateQuantity('${p.id}', -1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">-</button>
-                  <span id="qty-${p.id}" style="padding: 0 12px; font-size: 0.95rem; font-weight: 500; min-width: 30px; text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); height: 100%; display: flex; align-items: center; justify-content: center;">1</span>
-                  <button onclick="updateQuantity('${p.id}', 1)" style="padding: 0 12px; height: 100%; background: #f5f5f5; border: none; cursor: pointer; font-size: 1.2rem; color: #333; display: flex; align-items: center; justify-content: center;">+</button>
-                </div>
-              </div>
-              <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; background: #7A2833; border-color: #7A2833;" onclick="addToCart('${p.id}')">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
+  // Empty data check
+  if (!data.products || data.products.length === 0) {
+    productGrid.innerHTML = `
+      <div class="empty-products-state" style="text-align:center; padding: 60px 20px; background: #FFFFFF; border: 1px dashed var(--color-border); border-radius: var(--radius-lg); margin: 20px 0;">
+        <div style="font-size: 2.2rem; margin-bottom: 12px; color: #7A2833;">🔍</div>
+        <h4 style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-text-main); margin-bottom: 8px;">No Products Found</h4>
+        <p style="font-size: 0.95rem; color: var(--color-text-secondary); max-width: 440px; margin: 0 auto 20px auto;">We couldn't find any products in the catalog.</p>
+      </div>`;
+    return;
   }
+
+  // 1. "All Categories" selected: Flat, continuous, uninterrupted product listing
+  if (filterCat === 'all') {
+    const allProducts = sortProductsList(data.products, sortOrder);
+
+    if (allProducts.length === 0) {
+      productGrid.innerHTML = `
+        <div class="empty-products-state" style="text-align:center; padding: 60px 20px; background: #FFFFFF; border: 1px dashed var(--color-border); border-radius: var(--radius-lg); margin: 20px 0;">
+          <div style="font-size: 2.2rem; margin-bottom: 12px; color: #7A2833;">🔍</div>
+          <h4 style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-text-main); margin-bottom: 8px;">No Products Found</h4>
+          <p style="font-size: 0.95rem; color: var(--color-text-secondary); max-width: 440px; margin: 0 auto 20px auto;">We couldn't find any products in the catalog.</p>
+        </div>`;
+      return;
+    }
+
+    productGrid.innerHTML = `
+      <div class="product-grid" id="all-products-grid">
+        ${allProducts.map(renderProductCardHTML).join('')}
+      </div>
+    `;
+    return;
+  }
+
+  // 2. Specific category selected: Filter products to that category and display with category header
+  let catProducts = data.products.filter(p => p.category === filterCat);
+  catProducts = sortProductsList(catProducts, sortOrder);
+
+  // Derive human-readable category label dynamically
+  let catLabel = filterCat;
+  if (data.categories && data.categories.length > 0) {
+    const matched = data.categories.find(c => c.id === filterCat);
+    if (matched) catLabel = matched.label;
+  }
+  if (catLabel === filterCat && catProducts.length > 0 && catProducts[0].categoryLabel) {
+    catLabel = catProducts[0].categoryLabel;
+  }
+
+  if (catProducts.length === 0) {
+    productGrid.innerHTML = `
+      <div class="empty-products-state" style="text-align:center; padding: 60px 20px; background: #FFFFFF; border: 1px dashed var(--color-border); border-radius: var(--radius-lg); margin: 20px 0;">
+        <div style="font-size: 2.2rem; margin-bottom: 12px; color: #7A2833;">🔍</div>
+        <h4 style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-text-main); margin-bottom: 8px;">No Products in "${catLabel}"</h4>
+        <p style="font-size: 0.95rem; color: var(--color-text-secondary); max-width: 440px; margin: 0 auto 20px auto;">Currently no designs are available under this selection. Please check back soon or browse all collections.</p>
+        <button class="btn btn-secondary" onclick="selectCraftCategory('all')">View All Categories</button>
+      </div>`;
+    return;
+  }
+
+  productGrid.innerHTML = `
+    <section class="product-category-section" id="category-section-${filterCat}">
+      <div class="category-header">
+        <div class="category-header-left">
+          <h3 class="category-title">${catLabel}</h3>
+          <span class="category-count">(${catProducts.length} Design${catProducts.length > 1 ? 's' : ''})</span>
+        </div>
+      </div>
+      <div class="product-grid">
+        ${catProducts.map(renderProductCardHTML).join('')}
+      </div>
+    </section>
+  `;
 }
 
 // Track active category for Sakhi Creations so sort can re-apply it
 let currentCraftFilter = 'all';
+
+// Helper to select craft category programmatically and update UI buttons
+function selectCraftCategory(catId) {
+  currentCraftFilter = catId;
+  const container = document.getElementById('craft-category-buttons');
+  if (container) {
+    container.querySelectorAll('.category-btn').forEach(btn => {
+      const isSelected = btn.getAttribute('data-cat') === catId;
+      btn.classList.toggle('active', isSelected);
+      btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+    });
+  }
+  renderSakhiCreations(currentCraftFilter, currentSortOrder);
+}
+
+// Dynamically generate category filter buttons from data
+function renderCraftCategoryButtons() {
+  const container = document.getElementById('craft-category-buttons');
+  if (!container) return;
+
+  const data = window.SAKHI_CREATIONS_CONTENT;
+  if (!data) return;
+
+  // Base list of categories starting with "All Categories"
+  const categories = [
+    { id: 'all', label: 'All Categories' }
+  ];
+
+  if (data.categories && data.categories.length > 0) {
+    data.categories.forEach(c => {
+      if (c.id !== 'all' && !categories.some(existing => existing.id === c.id)) {
+        categories.push({ id: c.id, label: c.label });
+      }
+    });
+  } else if (data.products && data.products.length > 0) {
+    const seen = new Set();
+    data.products.forEach(p => {
+      if (p.category && !seen.has(p.category)) {
+        seen.add(p.category);
+        categories.push({
+          id: p.category,
+          label: p.categoryLabel || p.category
+        });
+      }
+    });
+  }
+
+  container.innerHTML = categories.map(cat => {
+    const isActive = cat.id === currentCraftFilter;
+    return `
+      <button 
+        type="button"
+        class="category-btn js-craft-filter ${isActive ? 'active' : ''}" 
+        data-cat="${cat.id}"
+        role="tab"
+        aria-selected="${isActive ? 'true' : 'false'}"
+      >
+        ${cat.label}
+      </button>
+    `;
+  }).join('');
+
+  // Attach click listener for dynamically generated buttons
+  container.querySelectorAll('.js-craft-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const selectedCat = btn.getAttribute('data-cat');
+      selectCraftCategory(selectedCat);
+    });
+  });
+}
 
 function initFilters() {
   document.querySelectorAll('.js-ca-filter').forEach(btn => {
@@ -660,14 +804,8 @@ function initFilters() {
     });
   });
 
-  document.querySelectorAll('.js-craft-filter').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.js-craft-filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentCraftFilter = btn.getAttribute('data-cat');
-      renderSakhiCreations(currentCraftFilter, currentSortOrder);
-    });
-  });
+  // Dynamically render category buttons for Sakhi Creations
+  renderCraftCategoryButtons();
 
   // Sort buttons for Sakhi Creations
   document.querySelectorAll('.sort-btn').forEach(btn => {
