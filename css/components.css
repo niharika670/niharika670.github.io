@@ -560,11 +560,11 @@
 .control-section-label,
 .sort-label,
 .filter-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), 'Space Mono', Menlo, Consolas, monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
   font-weight: 700;
   white-space: nowrap;
   min-width: 95px;
@@ -585,15 +585,15 @@
 .category-btn,
 .sort-btn,
 .filter-btn {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), 'Space Mono', 'SF Pro Text', Menlo, Monaco, Consolas, monospace;
   font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 7px 16px;
+  letter-spacing: 0.02em;
+  padding: 8px 18px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   background-color: #FFFFFF;
-  color: var(--color-text-secondary);
+  color: var(--color-text-main);
   cursor: pointer;
   transition: all var(--transition-fast);
   white-space: nowrap;
@@ -602,6 +602,7 @@
   align-items: center;
   justify-content: center;
   line-height: 1.2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .category-btn:hover,
@@ -611,6 +612,7 @@
   color: #7A2833;
   background-color: #FBF1F2;
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(122, 40, 51, 0.12);
 }
 
 .category-btn:focus-visible,
@@ -624,10 +626,11 @@
 .category-btn.active,
 .sort-btn.active,
 .filter-btn.active {
-  background-color: #7A2833;
-  border-color: #7A2833;
-  color: #FAF8F5;
-  box-shadow: 0 2px 6px rgba(122, 40, 51, 0.25);
+  background-color: #7A2833 !important;
+  border-color: #7A2833 !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(122, 40, 51, 0.3) !important;
 }
 
 /* Legacy filter pills (Accounts Sakhi) */
