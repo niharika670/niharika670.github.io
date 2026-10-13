@@ -121,6 +121,7 @@ const SAKHI_CREATIONS_CONTENT = {
   },
   categories: [
     { id: "all", label: "All Designs" },
+    { id: "mitti-diya", label: "Mitti Diya Collection" },
     { id: "tealight-rangoli", label: "Tealight Rangoli Collection" },
     { id: "shubh-labh", label: "Shubh Labh Collection" },
     { id: "single-urli", label: "Single Urli" },
@@ -128,6 +129,72 @@ const SAKHI_CREATIONS_CONTENT = {
     { id: "urli-matki", label: "Urli with Single Matki" }
   ],
   products: [
+    {
+      id: "prod-mitti-diya-01",
+      title: "Mitti Matki Glow",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 70,
+      image: "assets/images/products/mitti-diya-01.jpg",
+      description: "Decorative Mitti Matki Wax Candle handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-mitti-diya-02",
+      title: "Mitti Cup Lumière",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 70,
+      image: "assets/images/products/mitti-diya-02.jpg",
+      description: "Decorative Mitti Wax Candle Cup handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-mitti-diya-03",
+      title: "Charu Mitti Diya Set",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 90,
+      image: "assets/images/products/mitti-diya-03.jpg",
+      description: "Mitti Wax Diyas – Set of 4 handcrafted festive decor pieces.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-mitti-diya-04",
+      title: "Panchdeep Mitti Rangoli",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 250,
+      image: "assets/images/products/mitti-diya-04.jpg",
+      description: "Mitti Diya Rangoli – 5 Big Diyas handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-mitti-diya-05",
+      title: "Mitti Deep Utsav",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 50,
+      image: "assets/images/products/mitti-diya-05.jpg",
+      description: "Big Size Decorative Mitti Diya handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-mitti-diya-06",
+      title: "Dhara Mitti Dhoop Daani",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 110,
+      image: "assets/images/products/mitti-diya-06.jpg",
+      description: "Decorative Mitti Dhoop Daani with Handle handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
     {
       id: "prod-tealight-rangoli-01",
       title: "Ruby Pearl Diya Rangoli",
