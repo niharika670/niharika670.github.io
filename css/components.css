@@ -194,6 +194,27 @@
   }
 }
 
+/* Responsive adjustments for Header Actions on Mobile */
+@media (max-width: 768px) {
+  .site-header .whatsapp-direct-btn,
+  .site-header .header-whatsapp-btn,
+  .header-actions .whatsapp-direct-btn {
+    display: none !important;
+  }
+
+  .header-actions {
+    gap: var(--space-sm);
+  }
+
+  .cart-summary {
+    margin-right: 0 !important;
+    padding: 6px 10px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+  }
+}
+
 
 /* ==========================================================================
    2. TWO BIG GATEWAY CARDS (ACCOUNTS SAKHI & SAKHI CREATIONS)

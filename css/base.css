@@ -341,12 +341,16 @@ img {
   transform: translateX(4px);
 }
 
-/* Reduced Motion Respect */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+/* Responsive Visibility Utility */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
   }
 }
+
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+

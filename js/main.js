@@ -52,12 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initCartEvents() {
+  // Stop any click inside the cart dropdown from reaching the document-level
+  // close handler — prevents the cart from closing when +/- or remove buttons
+  // re-render the DOM (which causes e.target to no longer be inside .cart-container).
+  const dropdown = document.getElementById('cart-dropdown');
+  if (dropdown) {
+    dropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
   document.addEventListener('click', (e) => {
     const container = document.querySelector('.cart-container');
-    const dropdown = document.getElementById('cart-dropdown');
-    if (dropdown && dropdown.style.display === 'flex') {
+    const drop = document.getElementById('cart-dropdown');
+    if (drop && drop.style.display === 'flex') {
       if (container && !container.contains(e.target)) {
-        dropdown.style.display = 'none';
+        drop.style.display = 'none';
       }
     }
   });
