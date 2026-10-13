@@ -234,7 +234,7 @@ const SAKHI_CREATIONS_CONTENT = {
       title: "Shubh Milan Diya",
       category: "tealight-rangoli",
       categoryLabel: "Tealight Rangoli Collection",
-      price: 225,
+      price: 70,
       image: "assets/images/products/tealight-rangoli-04.jpg",
       description: "Shubh Milan Diya handcrafted festive decor piece.",
       origin: "Handcrafted in Meerut",
