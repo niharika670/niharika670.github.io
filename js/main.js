@@ -456,12 +456,38 @@ function openOrderCheckoutModal() {
     `).join('');
   }
 
-  // Open modal
+  // Open modal and ensure form view is visible
   const modal = document.getElementById('modal-order-checkout');
+  const form = document.getElementById('order-checkout-form');
+  const summaryBox = document.querySelector('.checkout-summary-box');
+  const successView = document.getElementById('order-success-view');
+
+  if (form) form.style.display = 'block';
+  if (summaryBox) summaryBox.style.display = 'block';
+  if (successView) successView.style.display = 'none';
+
   if (modal) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
+}
+
+function closeOrderSuccessModal() {
+  const modal = document.getElementById('modal-order-checkout');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+
+  const form = document.getElementById('order-checkout-form');
+  const summaryBox = document.querySelector('.checkout-summary-box');
+  const successView = document.getElementById('order-success-view');
+
+  if (form) {
+    form.reset();
+    form.style.display = 'block';
+  }
+  if (summaryBox) summaryBox.style.display = 'block';
+  if (successView) successView.style.display = 'none';
+  clearAllOrderErrors();
 }
 
 async function handleOrderSubmit(e) {
@@ -503,7 +529,7 @@ async function handleOrderSubmit(e) {
   // Show loading feedback on submit button
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>Sending Order to Studio... ⏳</span>';
+    submitBtn.innerHTML = '<span>Placing Order... ⏳</span>';
   }
 
   const payload = {
@@ -526,7 +552,7 @@ async function handleOrderSubmit(e) {
     'Order Placed At': new Date().toLocaleString('en-IN')
   };
 
-  // 1. Send formatted email to niharika@wesakhi.com
+  // 1. Send formatted email notification
   try {
     await fetch('https://formsubmit.co/ajax/niharika@wesakhi.com', {
       method: 'POST',
@@ -540,47 +566,31 @@ async function handleOrderSubmit(e) {
     console.warn('[Order] Email API notification:', err);
   }
 
-  // 2. Construct direct WhatsApp order with complete address and PIN code
-  let waMessage = `*New Order Placed on WeSakhi!*\n`;
-  waMessage += `*Order ID:* ${orderId}\n\n`;
-  waMessage += `*Customer Details:*\n`;
-  waMessage += `• *Name:* ${name}\n`;
-  waMessage += `• *Phone:* ${phone}\n`;
-  waMessage += `• *Email:* ${email}\n`;
-  waMessage += `• *Delivery Address:* ${fullAddress}\n`;
-  waMessage += `• *PIN Code:* ${pincode}\n`;
-  if (notes) waMessage += `• *Notes:* ${notes}\n`;
-  waMessage += `\n*Products Ordered:*\n${itemsSummary}\n`;
-  waMessage += `*Total Amount:* ₹${totalPrice.toLocaleString('en-IN')}`;
-
-  const waUrl = `https://wa.me/919068711159?text=${encodeURIComponent(waMessage)}`;
-  window.open(waUrl, '_blank');
-
-  // Close modal
-  const modal = document.getElementById('modal-order-checkout');
-  if (modal) modal.classList.remove('active');
-  document.body.style.overflow = '';
-
   // Clear cart and storage
   cart = [];
   updateCartUI();
   saveCartToStorage();
 
-  // Reset form
-  const form = document.getElementById('order-checkout-form');
-  if (form) form.reset();
-  clearAllOrderErrors();
-
+  // Reset button state
   if (submitBtn) {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnContent;
   }
 
+  // Display Order ID confirmation view to user (No WhatsApp redirect)
+  const form = document.getElementById('order-checkout-form');
+  const summaryBox = document.querySelector('.checkout-summary-box');
+  const successView = document.getElementById('order-success-view');
+  const confirmedOrderIdEl = document.getElementById('confirmed-order-id');
+
+  if (form) form.style.display = 'none';
+  if (summaryBox) summaryBox.style.display = 'none';
+  if (confirmedOrderIdEl) confirmedOrderIdEl.textContent = orderId;
+  if (successView) successView.style.display = 'block';
+
   // Toast confirmation
   if (window.Modals && window.Modals.showToast) {
-    window.Modals.showToast(`✓ Order #${orderId} confirmed! Our team is on it and will contact you shortly.`);
-  } else {
-    alert(`Thank you, ${name}! Your order #${orderId} has been confirmed. Our team is on it!`);
+    window.Modals.showToast(`✓ Order #${orderId} confirmed!`);
   }
 }
 
@@ -595,6 +605,7 @@ window.toggleCartDropdown = toggleCartDropdown;
 window.removeFromCart = removeFromCart;
 window.checkoutCart = checkoutCart;
 window.openOrderCheckoutModal = openOrderCheckoutModal;
+window.closeOrderSuccessModal = closeOrderSuccessModal;
 window.handleOrderSubmit = handleOrderSubmit;
 window.updateCartItemQuantity = updateCartItemQuantity;
 window.validateOrderForm = validateOrderForm;

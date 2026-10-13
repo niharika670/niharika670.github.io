@@ -566,6 +566,25 @@
             <span>Confirm Order &amp; Send Details →</span>
           </button>
         </form>
+
+        <!-- Order Success View (shown after order submission) -->
+        <div id="order-success-view" style="display:none; text-align:center; padding:20px 10px;">
+          <div style="width:60px; height:60px; background:#E8F8EE; color:#1EBE5D; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:2rem; margin-bottom:16px;">✓</div>
+          <h3 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--color-text-main); margin-bottom:8px;">Order Placed Successfully!</h3>
+          <p style="color:var(--color-text-secondary); margin-bottom:18px; font-size:0.95rem;">
+            Thank you for shopping with Sakhi Creations. We have received your order details.
+          </p>
+          <div style="background:var(--color-bg-secondary); border:1px solid var(--color-border); border-radius:8px; padding:16px; margin-bottom:20px; display:inline-block; min-width:260px;">
+            <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-text-tertiary); margin-bottom:4px; font-family:var(--font-mono);">Your Order ID</div>
+            <div id="confirmed-order-id" style="font-family:var(--font-mono); font-size:1.4rem; font-weight:700; color:#7A2833;">WS-000000</div>
+          </div>
+          <p style="font-size:0.85rem; color:var(--color-text-secondary); line-height:1.5; max-width:440px; margin:0 auto 24px;">
+            Please note this order ID for future reference. Our team will verify stock and contact you shortly for dispatch.
+          </p>
+          <button type="button" class="btn btn-primary" style="background:#7A2833; border-color:#7A2833; padding:10px 24px;" onclick="closeOrderSuccessModal()">
+            Done / Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -619,10 +638,10 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/data.js?v=20261013-10"></script>
-  <script src="js/router.js?v=20261013-10"></script>
-  <script src="js/modals.js?v=20261013-10"></script>
-  <script src="js/main.js?v=20261013-10"></script>
+  <script src="js/data.js?v=20261013-11"></script>
+  <script src="js/router.js?v=20261013-11"></script>
+  <script src="js/modals.js?v=20261013-11"></script>
+  <script src="js/main.js?v=20261013-11"></script>
   <script>
     document.getElementById('current-year').textContent = new Date().getFullYear();
   </script>
