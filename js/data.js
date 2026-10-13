@@ -22,6 +22,7 @@ const ACCOUNTS_SAKHI_CONTENT = {
   hindiTitle: "Accounts सखी™",
   logo: "assets/images/accounts-sakhi-logo.jpg",
   tagline: "Accounting • Tax • Compliance • AI Guidance",
+  youtubeUrl: "https://www.youtube.com/@AccountsSakhi",
   hero: {
     heading: "Making CA, Taxation and Financial Compliance Simple & Intuitive.",
     subheading: "Comprehensive educational content, tax guides, Ind AS walkthroughs, and modern AI guidance for CA aspirants, students, and businesses."

@@ -52,7 +52,7 @@ const Modals = {
         <p style="font-size:0.95rem; color:var(--color-text-secondary); line-height:1.6; margin-bottom:20px;">${video.description}</p>
         <div style="display:flex; justify-content:space-between; align-items:center; padding-top:16px; border-top:1px solid var(--color-border);">
           <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-tertiary);">Accounts सखी™ &bull; YouTube Masterclasses</span>
-          <a href="https://youtube.com" target="_blank" rel="noopener" class="btn" style="background:#17324D; color:#FAF8F5; padding:8px 18px; font-size:0.85rem;">
+          <a href="https://www.youtube.com/@AccountsSakhi" target="_blank" rel="noopener" class="btn" style="background:#17324D; color:#FAF8F5; padding:8px 18px; font-size:0.85rem;">
             Watch Full Series on YouTube ↗
           </a>
         </div>
