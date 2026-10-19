@@ -197,6 +197,17 @@ const SAKHI_CREATIONS_CONTENT = {
       inStock: true
     },
     {
+      id: "prod-mitti-diya-07",
+      title: "Mitti Diyas Flower",
+      category: "mitti-diya",
+      categoryLabel: "Mitti Diya Collection",
+      price: 60,
+      image: "assets/images/products/mitti-diya-07.jpg",
+      description: "Floral shaped Mitti Diya handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
       id: "prod-tealight-rangoli-01",
       title: "Ruby Pearl Diya Rangoli",
       category: "tealight-rangoli",
@@ -281,6 +292,17 @@ const SAKHI_CREATIONS_CONTENT = {
       price: 70,
       image: "assets/images/products/tealight-rangoli-08.jpg",
       description: "Gau Gauri Golden Glow handcrafted festive decor piece.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-tealight-rangoli-09",
+      title: "Rose Tea Light Rangoli",
+      category: "tealight-rangoli",
+      categoryLabel: "Tealight Rangoli Collection",
+      price: 300,
+      image: "assets/images/products/tealight-rangoli-09.jpg",
+      description: "Rose Tea Light Rangoli handcrafted festive decor piece.",
       origin: "Handcrafted in Meerut",
       inStock: true
     },
@@ -413,6 +435,17 @@ const SAKHI_CREATIONS_CONTENT = {
       price: 150,
       image: "assets/images/products/image6.jpg",
       description: "Auspicious turtle base single urli.",
+      origin: "Handcrafted in Meerut",
+      inStock: true
+    },
+    {
+      id: "prod-single-urli-06",
+      title: "Metal Urli with filled candles",
+      category: "single-urli",
+      categoryLabel: "Single Urli",
+      price: 200,
+      image: "assets/images/products/single-urli-06.jpg",
+      description: "Decorative metal urli with filled candles handcrafted for festive celebrations.",
       origin: "Handcrafted in Meerut",
       inStock: true
     },
