@@ -110,6 +110,15 @@ const Router = {
     if (window.closeMobileNav) {
       window.closeMobileNav();
     }
+
+    // Google Analytics 4 SPA Virtual Pageview
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: `/${targetView}`
+      });
+    }
   }
 };
 

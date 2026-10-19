@@ -171,6 +171,21 @@ function addToCart(productId) {
 
   updateCartUI();
   saveCartToStorage();
+
+  // GA4 Ecommerce Event: add_to_cart
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'add_to_cart', {
+      currency: 'INR',
+      value: product.price * qty,
+      items: [{
+        item_id: product.id,
+        item_name: product.title,
+        item_category: product.categoryLabel || product.category,
+        price: product.price,
+        quantity: qty
+      }]
+    });
+  }
   
   if (window.Modals && window.Modals.showToast) {
     window.Modals.showToast(`Added ${qty} × ${product.title} to cart.`);
@@ -243,9 +258,24 @@ function toggleCartDropdown() {
 }
 
 function removeFromCart(productId) {
+  const itemToRemove = cart.find(item => item.id === productId);
   cart = cart.filter(item => item.id !== productId);
   updateCartUI();
   saveCartToStorage();
+
+  // GA4 Ecommerce Event: remove_from_cart
+  if (itemToRemove && typeof window.gtag === 'function') {
+    window.gtag('event', 'remove_from_cart', {
+      currency: 'INR',
+      value: itemToRemove.price * itemToRemove.quantity,
+      items: [{
+        item_id: itemToRemove.id,
+        item_name: itemToRemove.title,
+        price: itemToRemove.price,
+        quantity: itemToRemove.quantity
+      }]
+    });
+  }
 }
 
 function clearAllOrderErrors() {
@@ -444,6 +474,20 @@ function openOrderCheckoutModal() {
   if (summaryCount) summaryCount.textContent = `${totalItems} item${totalItems > 1 ? 's' : ''}`;
   if (summaryTotal) summaryTotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
 
+  // GA4 Ecommerce Event: begin_checkout
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'begin_checkout', {
+      currency: 'INR',
+      value: totalPrice,
+      items: cart.map(item => ({
+        item_id: item.id,
+        item_name: item.title,
+        price: item.price,
+        quantity: item.quantity
+      }))
+    });
+  }
+
   if (summaryItems) {
     summaryItems.innerHTML = cart.map((item, idx) => `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -564,6 +608,21 @@ async function handleOrderSubmit(e) {
     });
   } catch (err) {
     console.warn('[Order] Email API notification:', err);
+  }
+
+  // GA4 Ecommerce Event: purchase
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'purchase', {
+      transaction_id: orderId,
+      value: totalPrice,
+      currency: 'INR',
+      items: cart.map(item => ({
+        item_id: item.id,
+        item_name: item.title,
+        price: item.price,
+        quantity: item.quantity
+      }))
+    });
   }
 
   // Clear cart and storage
@@ -758,6 +817,14 @@ function selectCraftCategory(catId) {
     });
   }
   renderSakhiCreations(currentCraftFilter, currentSortOrder);
+
+  // GA4 Event: select_content (category filter)
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'select_content', {
+      content_type: 'product_category',
+      item_id: catId
+    });
+  }
 }
 
 // Dynamically generate category filter buttons from data
@@ -882,6 +949,15 @@ function initContactForm() {
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // GA4 Lead Generation Event
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'generate_lead', {
+          lead_type: 'general_inquiry',
+          method: 'contact_form'
+        });
+      }
+
       if (window.Modals && window.Modals.showToast) {
         window.Modals.showToast('Thank you! Your message has been sent to WeSakhi.');
       }

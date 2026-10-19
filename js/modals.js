@@ -30,6 +30,15 @@ const Modals = {
     const video = window.ACCOUNTS_SAKHI_CONTENT?.videos.find(v => v.id === videoId);
     if (!video) return;
 
+    // GA4 Video Play Event
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'video_start', {
+        video_title: video.title,
+        video_id: videoId,
+        video_provider: 'youtube'
+      });
+    }
+
     const modal = document.getElementById('modal-video');
     const container = modal.querySelector('.video-modal-container');
 
